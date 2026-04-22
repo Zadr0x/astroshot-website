@@ -80,23 +80,7 @@ export default function ProjectCard({ project }: { project: Project }) {
           </video>
         )}
 
-        {/* Play icon — clean white triangle, no browser chrome */}
-        {isVideo && !(hovered && videoLoaded) && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
-              <div
-                style={{
-                  width: 0,
-                  height: 0,
-                  borderTop: "8px solid transparent",
-                  borderBottom: "8px solid transparent",
-                  borderLeft: "14px solid white",
-                  marginLeft: "3px",
-                }}
-              />
-            </div>
-          </div>
-        )}
+        {/* No play button — thumbnail shows, video plays on hover */}
 
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
