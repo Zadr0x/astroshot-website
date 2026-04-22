@@ -2,9 +2,9 @@
 
 export const dynamic = "force-dynamic";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { supabase, uploadFile } from "@/lib/supabase";
 import type { SiteContent } from "@/lib/supabase";
 import AdminHeader from "@/components/admin/AdminHeader";
 
@@ -17,6 +17,13 @@ export default function AdminContentPage() {
   const [saved, setSaved] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(true);
 
+  // Hero video state
+  const [heroVideoUrl, setHeroVideoUrl] = useState<string | null>(null);
+  const [heroVideoId, setHeroVideoId] = useState<string | null>(null);
+  const [videoUploading, setVideoUploading] = useState(false);
+  const [videoRemoving, setVideoRemoving] = useState(false);
+  const videoInputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) { router.push("/admin/login"); return; }
@@ -26,8 +33,45 @@ export default function AdminContentPage() {
 
   const loadContent = async () => {
     const { data } = await supabase.from("site_content").select("*").order("section").order("key");
-    setItems((data as SiteContent[]) ?? []);
+    const all = (data as SiteContent[]) ?? [];
+    const videoEntry = all.find((i) => i.key === "hero_video_url");
+    if (videoEntry) {
+      setHeroVideoUrl(videoEntry.value || null);
+      setHeroVideoId(videoEntry.id);
+    }
+    setItems(all.filter((i) => i.key !== "hero_video_url"));
     setLoading(false);
+  };
+
+  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setVideoUploading(true);
+    const url = await uploadFile(file, "hero-video");
+    if (url) {
+      if (heroVideoId) {
+        await supabase.from("site_content").update({ value: url, updated_at: new Date().toISOString() }).eq("id", heroVideoId);
+      } else {
+        const { data } = await supabase.from("site_content").insert({
+          key: "hero_video_url",
+          value: url,
+          label: "Hero Video URL",
+          section: "hero",
+        }).select().single();
+        if (data) setHeroVideoId(data.id);
+      }
+      setHeroVideoUrl(url);
+    }
+    setVideoUploading(false);
+    if (videoInputRef.current) videoInputRef.current.value = "";
+  };
+
+  const handleRemoveVideo = async () => {
+    if (!heroVideoId) return;
+    setVideoRemoving(true);
+    await supabase.from("site_content").update({ value: "", updated_at: new Date().toISOString() }).eq("id", heroVideoId);
+    setHeroVideoUrl(null);
+    setVideoRemoving(false);
   };
 
   const handleSave = async (item: SiteContent) => {
@@ -58,6 +102,58 @@ export default function AdminContentPage() {
       <p className="text-sm text-[#555] mb-8 -mt-4">
         Edit the text that appears on your public website. Changes take effect immediately.
       </p>
+
+      {/* Hero Video Section */}
+      <div className="mb-10">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-[#01F17C] mb-4 pl-1">
+          Hero Video
+        </h2>
+        <div className="rounded-2xl bg-[#111] border border-white/10 p-5 space-y-4">
+          <p className="text-sm text-white/50">
+            This video plays fullscreen on the homepage hero. Recommended: 15–30 seconds, MP4, under 50MB.
+          </p>
+
+          {heroVideoUrl && (
+            <video
+              src={heroVideoUrl}
+              controls
+              muted
+              playsInline
+              className="w-full max-w-md rounded-xl border border-white/10 bg-black"
+            />
+          )}
+
+          {heroVideoUrl && (
+            <p className="text-xs text-[#444] font-mono break-all">{heroVideoUrl}</p>
+          )}
+
+          <div className="flex flex-wrap gap-3">
+            <input
+              ref={videoInputRef}
+              type="file"
+              accept="video/mp4,video/*"
+              className="hidden"
+              onChange={handleVideoUpload}
+            />
+            <button
+              onClick={() => videoInputRef.current?.click()}
+              disabled={videoUploading}
+              className="px-4 py-2 rounded-xl bg-[#01F17C] text-[#050505] text-sm font-semibold hover:bg-[#00d96e] disabled:opacity-50 transition-colors"
+            >
+              {videoUploading ? "Uploading..." : heroVideoUrl ? "Replace Video" : "Upload Video"}
+            </button>
+            {heroVideoUrl && (
+              <button
+                onClick={handleRemoveVideo}
+                disabled={videoRemoving}
+                className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-white/60 text-sm font-semibold hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/30 disabled:opacity-50 transition-colors"
+              >
+                {videoRemoving ? "Removing..." : "Remove Video"}
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
 
       {loading ? (
         <div className="space-y-4">{Array.from({ length: 6 }).map((_, i) => <div key={i} className="h-24 rounded-xl bg-[#111] animate-pulse" />)}</div>

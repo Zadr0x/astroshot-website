@@ -1,14 +1,27 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import gsap from "gsap";
+import { supabase } from "@/lib/supabase";
 
 export default function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const subRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
+  const [videoSrc, setVideoSrc] = useState("/hero-reel.mp4");
+
+  useEffect(() => {
+    supabase
+      .from("site_content")
+      .select("value")
+      .eq("key", "hero_video_url")
+      .single()
+      .then(({ data }) => {
+        if (data?.value) setVideoSrc(data.value);
+      });
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -31,8 +44,9 @@ export default function HeroSection() {
     >
       {/* Video background */}
       <video
+        key={videoSrc}
         className="absolute inset-0 w-full h-full object-cover opacity-30"
-        src="/hero-reel.mp4"
+        src={videoSrc}
         autoPlay
         muted
         loop

@@ -175,3 +175,5 @@ INSERT INTO site_content (key, value, label, section) VALUES
   ('cta_headline', 'Ready to make your brand impossible to ignore?', 'CTA Headline', 'cta'),
   ('footer_tagline', 'Kuwait''s leading VFX, CGI, and creative marketing agency. 500M+ organic views across the GCC.', 'Footer Tagline', 'footer')
 ON CONFLICT (key) DO NOTHING;
+
+-- Bucket: hero-video (public) - for homepage hero video
