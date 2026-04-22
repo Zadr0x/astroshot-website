@@ -1,0 +1,100 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { supabase } from "@/lib/supabase";
+import type { BlogPost } from "@/lib/supabase";
+
+export default function BlogPage() {
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    supabase
+      .from("blog_posts")
+      .select("*")
+      .eq("status", "published")
+      .order("published_at", { ascending: false })
+      .then(({ data }) => {
+        setPosts((data as BlogPost[]) ?? []);
+        setLoading(false);
+      });
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-[#FAFAFA] pt-24">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+          <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#01F17C]">Blog</span>
+          <h1 className="mt-3 text-5xl lg:text-6xl font-black text-[#111111] tracking-tight">
+            Insights & Stories
+          </h1>
+          <p className="mt-4 text-[#666] max-w-xl">
+            Behind the scenes, industry insights, and creative stories from Astroshot.
+          </p>
+        </motion.div>
+
+        {loading ? (
+          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="rounded-2xl bg-[#f0f0f0] h-80 animate-pulse" />
+            ))}
+          </div>
+        ) : posts.length === 0 ? (
+          <div className="mt-24 text-center text-[#999]">
+            <p className="text-lg">No posts published yet.</p>
+            <p className="text-sm mt-2">Check back soon.</p>
+          </div>
+        ) : (
+          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {posts.map((post, i) => (
+              <motion.article
+                key={post.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.07 }}
+              >
+                <Link href={`/blog/${post.slug}`} className="group block h-full">
+                  <div className="rounded-2xl bg-white border border-[#f0f0f0] overflow-hidden hover:shadow-lg hover:shadow-black/5 transition-all duration-300 h-full flex flex-col">
+                    {post.cover_image_url ? (
+                      <div className="relative overflow-hidden h-48">
+                        <img
+                          src={post.cover_image_url}
+                          alt={post.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      </div>
+                    ) : (
+                      <div className="h-48 bg-gradient-to-br from-[#050505] to-[#1a1a1a] flex items-center justify-center">
+                        <span className="text-4xl text-white/10">✍</span>
+                      </div>
+                    )}
+                    <div className="p-6 flex flex-col flex-1">
+                      {post.published_at && (
+                        <p className="text-xs text-[#999] uppercase tracking-widest mb-3">
+                          {new Date(post.published_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+                        </p>
+                      )}
+                      <h2 className="text-lg font-black text-[#111] leading-tight group-hover:text-[#01F17C] transition-colors">
+                        {post.title}
+                      </h2>
+                      {post.excerpt && (
+                        <p className="mt-2 text-sm text-[#666] leading-relaxed flex-1">
+                          {post.excerpt}
+                        </p>
+                      )}
+                      <p className="mt-4 text-xs font-bold text-[#01F17C] group-hover:gap-2 transition-all">
+                        Read more →
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              </motion.article>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

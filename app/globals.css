@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-green: #01F17C;
+  --color-black-deep: #050505;
+  --color-white-soft: #FAFAFA;
+  --color-text-dark: #111111;
+  --color-text-grey: #666666;
+  --font-montserrat: var(--font-montserrat);
+}
+
+:root {
+  --background: #FAFAFA;
+  --foreground: #111111;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-montserrat), 'Montserrat', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+::-webkit-scrollbar-thumb {
+  background: #01F17C;
+  border-radius: 3px;
+}
+
+/* Marquee animation */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* Counter animation */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
