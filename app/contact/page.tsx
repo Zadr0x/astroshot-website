@@ -62,10 +62,18 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-[#FAFAFA] pt-24">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+        {/* Mobile-only headline above the form */}
+        <div className="block lg:hidden mb-8">
+          <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#00a855]">Contact</span>
+          <h1 className="mt-2 text-3xl font-black text-[#111111] tracking-tight leading-tight">
+            Let&apos;s Build Something Extraordinary
+          </h1>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:grid-flow-row">
           {/* Left info — shows second on mobile, first on desktop */}
           <motion.div
-            className="order-2 lg:order-1"
+            className="order-2 lg:order-1 hidden lg:block"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}

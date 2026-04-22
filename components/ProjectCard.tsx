@@ -14,65 +14,91 @@ const categoryColors: Record<string, string> = {
 export default function ProjectCard({ project }: { project: Project }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hovered, setHovered] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
   const isVideo = project.media_type === "video" && !!project.media_url;
+
+  const handleMouseEnter = () => {
+    setHovered(true);
+    // Mount video element on first hover
+    if (!showVideo && isVideo) {
+      setShowVideo(true);
+    }
+    // If already mounted and loaded, play immediately
+    if (videoRef.current && videoLoaded) {
+      videoRef.current.play().catch(() => {});
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setHovered(false);
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+  };
+
+  const handleCanPlay = () => {
+    setVideoLoaded(true);
+    if (hovered && videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+  };
 
   return (
     <Link href={`/portfolio/${project.id}`} className="block group">
       <div
         className="relative rounded-2xl overflow-hidden bg-[#111111] aspect-[4/5] cursor-pointer"
-        onMouseEnter={() => {
-          setHovered(true);
-          videoRef.current?.play().catch(() => {});
-        }}
-        onMouseLeave={() => {
-          setHovered(false);
-          if (videoRef.current) {
-            videoRef.current.pause();
-            videoRef.current.currentTime = 0;
-          }
-        }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
-        {/* Dark gradient placeholder bg */}
+        {/* Dark bg */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#222] to-[#111]" />
 
-        {/* Thumbnail */}
+        {/* Thumbnail — always visible, fades out when video is playing */}
         {project.thumbnail_url && (
           <Image
             src={project.thumbnail_url}
             alt={project.title}
             fill
-            className={`object-cover transition-opacity duration-300 ${hovered && isVideo ? "opacity-0" : "opacity-100"}`}
+            className={`object-cover transition-opacity duration-300 ${hovered && videoLoaded ? "opacity-0" : "opacity-100"}`}
             sizes="(max-width: 768px) 50vw, 25vw"
           />
         )}
 
-        {/* Video — always in DOM, hidden until ready AND hovered */}
-        {isVideo && project.media_url && (
+        {/* Video — only mounted after first hover to prevent browser default icon */}
+        {showVideo && project.media_url && (
           <video
             ref={videoRef}
             muted
             loop
             playsInline
-            preload="auto"
-            onCanPlay={(e) => { (e.target as HTMLVideoElement).dataset.ready = "1"; }}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${hovered ? "opacity-100" : "opacity-0"}`}
+            onCanPlay={handleCanPlay}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${hovered && videoLoaded ? "opacity-100" : "opacity-0"}`}
           >
             <source src={project.media_url} type="video/mp4" />
           </video>
         )}
 
-        {/* Play icon — only when not hovered AND is video */}
-        {isVideo && !hovered && (
+        {/* Play icon — clean white triangle, no browser chrome */}
+        {isVideo && !(hovered && videoLoaded) && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="w-10 h-10 rounded-full bg-black/60 flex items-center justify-center">
-              <svg className="w-4 h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-              </svg>
+            <div className="w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
+              <div
+                style={{
+                  width: 0,
+                  height: 0,
+                  borderTop: "8px solid transparent",
+                  borderBottom: "8px solid transparent",
+                  borderLeft: "14px solid white",
+                  marginLeft: "3px",
+                }}
+              />
             </div>
           </div>
         )}
 
-        {/* Gradient overlay bottom */}
+        {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
 
         {/* Content */}
