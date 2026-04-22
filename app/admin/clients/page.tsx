@@ -4,7 +4,8 @@ export const dynamic = "force-dynamic";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase, uploadFile } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase";
+import { uploadFileAdmin as uploadFile } from "@/lib/supabase-admin";
 import type { Client } from "@/lib/supabase";
 import AdminHeader from "@/components/admin/AdminHeader";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { uploadFile } from "@/lib/supabase";
+import { uploadFileAdmin as uploadFile } from "@/lib/supabase-admin";
 
 interface ImageUploadProps {
   bucket: string;

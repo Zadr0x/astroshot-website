@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { supabase, uploadFile } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase";
+import { uploadFileAdmin as uploadFile } from "@/lib/supabase-admin";
 import type { Project, ProjectImage } from "@/lib/supabase";
 import ImageUpload from "./ImageUpload";
 
