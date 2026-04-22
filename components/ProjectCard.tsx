@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -15,15 +15,18 @@ const categoryColors: Record<string, string> = {
 
 export default function ProjectCard({ project }: { project: Project }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
   const isVideo = project.media_type === "video" && !!project.media_url;
 
   const handleMouseEnter = () => {
+    setIsHovered(true);
     if (videoRef.current) {
       videoRef.current.play().catch(() => {});
     }
   };
 
   const handleMouseLeave = () => {
+    setIsHovered(false);
     if (videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
@@ -31,7 +34,7 @@ export default function ProjectCard({ project }: { project: Project }) {
   };
 
   return (
-    <Link href={`/portfolio/${project.id}`}>
+    <Link href={`/portfolio/${project.id}`} className="block">
       <motion.div
         className="group relative rounded-2xl overflow-hidden bg-[#111111] aspect-[4/5] cursor-pointer"
         onMouseEnter={handleMouseEnter}
@@ -47,29 +50,30 @@ export default function ProjectCard({ project }: { project: Project }) {
             src={project.thumbnail_url}
             alt={project.title}
             fill
-            className="object-cover transition-opacity duration-500 group-hover:opacity-0"
-            sizes="(max-width: 768px) 50vw, 33vw"
+            className={`object-cover transition-opacity duration-500 ${isHovered && isVideo ? "opacity-0" : "opacity-100"}`}
+            sizes="(max-width: 768px) 50vw, 25vw"
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-[#36FF9D]/20 via-[#01F17C]/10 to-[#050505]" />
         )}
 
         {/* Video */}
-        {isVideo && (
+        {isVideo && project.media_url && (
           <video
             ref={videoRef}
-            src={project.media_url!}
             muted
             loop
             playsInline
-            preload="auto"
-            className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-          />
+            preload="metadata"
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${isHovered ? "opacity-100" : "opacity-0"}`}
+          >
+            <source src={project.media_url} />
+          </video>
         )}
 
-        {/* Play icon for video cards */}
-        {isVideo && (
-          <div className="absolute inset-0 flex items-center justify-center group-hover:opacity-0 transition-opacity pointer-events-none">
+        {/* Play icon */}
+        {isVideo && !isHovered && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
               <svg className="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z" />
@@ -83,14 +87,14 @@ export default function ProjectCard({ project }: { project: Project }) {
 
         {/* Content */}
         <div className="absolute bottom-0 left-0 right-0 p-4">
-          <span className={`inline-block text-xs font-600 px-2.5 py-1 rounded-full mb-2 ${categoryColors[project.category] || "bg-white/10 text-white"}`}>
+          <span className={`inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-2 ${categoryColors[project.category] || "bg-white/10 text-white"}`}>
             {project.category}
           </span>
-          <h3 className="text-white font-700 text-sm leading-snug">{project.title}</h3>
+          <h3 className="text-white font-bold text-sm leading-snug">{project.title}</h3>
         </div>
 
         {project.featured && (
-          <div className="absolute top-3 right-3 bg-[#01F17C] text-[#050505] text-xs font-700 px-2 py-0.5 rounded-full">
+          <div className="absolute top-3 right-3 bg-[#01F17C] text-[#050505] text-xs font-bold px-2 py-0.5 rounded-full">
             Featured
           </div>
         )}
