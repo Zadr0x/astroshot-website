@@ -72,11 +72,11 @@ export default function PortfolioPage() {
 
         {/* Grid */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {Array.from({ length: 6 }).map((_, i) => (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+            {Array.from({ length: 8 }).map((_, i) => (
               <div
                 key={i}
-                className="rounded-2xl bg-[#f0f0f0] aspect-video animate-pulse"
+                className="rounded-2xl bg-[#f0f0f0] aspect-[9/16] animate-pulse"
               />
             ))}
           </div>
@@ -93,7 +93,7 @@ export default function PortfolioPage() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
             {filtered.map((project) => (
               <ProjectCard key={project.id} project={project} />
             ))}

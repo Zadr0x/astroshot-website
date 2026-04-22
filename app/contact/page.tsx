@@ -20,6 +20,7 @@ export default function ContactPage() {
     email: "",
     phone: "",
     service: "",
+    budget: "",
     message: "",
   });
   const [submitting, setSubmitting] = useState(false);
@@ -43,6 +44,7 @@ export default function ContactPage() {
       email: formData.email || null,
       phone: formData.phone || null,
       service: formData.service || null,
+      budget: formData.budget || null,
       message: formData.message,
       status: "new",
     });
@@ -213,6 +215,24 @@ export default function ContactPage() {
                     {services.map((s) => (
                       <option key={s} value={s}>{s}</option>
                     ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-widest text-[#999999] mb-2">
+                    Budget (USD)
+                  </label>
+                  <select
+                    name="budget"
+                    value={formData.budget}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 rounded-xl border border-[#e8e8e8] text-sm text-[#111111] focus:outline-none focus:border-[#01F17C] transition-colors bg-white appearance-none"
+                  >
+                    <option value="">Select your budget</option>
+                    <option value="under_5k">Under $5,000</option>
+                    <option value="5k_10k">$5,000 – $10,000</option>
+                    <option value="10k_20k">$10,000 – $20,000</option>
+                    <option value="above_20k">Above $20,000</option>
                   </select>
                 </div>
 

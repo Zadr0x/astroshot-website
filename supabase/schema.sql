@@ -97,11 +97,13 @@ CREATE TABLE IF NOT EXISTS blog_posts (
 );
 
 -- Contact form submissions
+-- Note: run this migration: ALTER TABLE contact_submissions ADD COLUMN IF NOT EXISTS budget TEXT;
 CREATE TABLE IF NOT EXISTS contact_submissions (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL,
   company TEXT,
   service TEXT,
+  budget TEXT,
   message TEXT NOT NULL,
   email TEXT,
   phone TEXT,

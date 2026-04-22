@@ -73,7 +73,7 @@ export default function ProjectDetailPage() {
       <div className="max-w-5xl mx-auto px-6 lg:px-8 py-16">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <Link href="/portfolio" className="text-xs font-bold uppercase tracking-widest text-[#01F17C] hover:underline">
-            ← Portfolio
+            ← All Projects
           </Link>
 
           {/* Hero image */}
@@ -156,7 +156,7 @@ export default function ProjectDetailPage() {
 
           <div className="mt-16 pt-8 border-t border-[#f0f0f0] flex items-center justify-between">
             <Link href="/portfolio" className="text-sm font-bold text-[#111] hover:text-[#01F17C] transition-colors">
-              ← Back to Portfolio
+              ← All Projects
             </Link>
             <Link
               href="/contact"
