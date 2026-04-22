@@ -108,19 +108,19 @@ export default function ProjectDetailPage() {
 
           {/* Main media */}
           {project.media_url && (
-            <div className="mt-10">
+            <div className="mt-10 flex justify-center">
               {project.media_type === "video" ? (
                 <video
                   src={project.media_url}
                   controls
-                  className="w-full rounded-2xl"
+                  className="w-full max-w-2xl rounded-2xl block"
                   poster={project.thumbnail_url ?? undefined}
                 />
               ) : (
                 <img
                   src={project.media_url}
                   alt={project.title}
-                  className="w-full rounded-2xl cursor-pointer hover:opacity-95 transition-opacity"
+                  className="w-full max-w-2xl rounded-2xl cursor-pointer hover:opacity-95 transition-opacity block"
                   onClick={() => setLightbox(project.media_url!)}
                 />
               )}

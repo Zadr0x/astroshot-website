@@ -1,9 +1,7 @@
 "use client";
-
 import { useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import type { Project } from "@/lib/supabase";
 
 const categoryColors: Record<string, string> = {
@@ -15,75 +13,66 @@ const categoryColors: Record<string, string> = {
 
 export default function ProjectCard({ project }: { project: Project }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
+  const [hovered, setHovered] = useState(false);
   const isVideo = project.media_type === "video" && !!project.media_url;
 
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-    if (videoRef.current) {
-      videoRef.current.play().catch(() => {});
-    }
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-    }
-  };
-
   return (
-    <Link href={`/portfolio/${project.id}`} className="block">
-      <motion.div
-        className="group relative rounded-2xl overflow-hidden bg-[#111111] aspect-[4/5] cursor-pointer"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.4 }}
+    <Link href={`/portfolio/${project.id}`} className="block group">
+      <div
+        className="relative rounded-2xl overflow-hidden bg-[#111111] aspect-[4/5] cursor-pointer"
+        onMouseEnter={() => {
+          setHovered(true);
+          videoRef.current?.play().catch(() => {});
+        }}
+        onMouseLeave={() => {
+          setHovered(false);
+          if (videoRef.current) {
+            videoRef.current.pause();
+            videoRef.current.currentTime = 0;
+          }
+        }}
       >
+        {/* Dark gradient placeholder bg */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#222] to-[#111]" />
+
         {/* Thumbnail */}
-        {project.thumbnail_url ? (
+        {project.thumbnail_url && (
           <Image
             src={project.thumbnail_url}
             alt={project.title}
             fill
-            className={`object-cover transition-opacity duration-500 ${isHovered && isVideo ? "opacity-0" : "opacity-100"}`}
+            className={`object-cover transition-opacity duration-300 ${hovered && isVideo ? "opacity-0" : "opacity-100"}`}
             sizes="(max-width: 768px) 50vw, 25vw"
           />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-[#36FF9D]/20 via-[#01F17C]/10 to-[#050505]" />
         )}
 
-        {/* Video */}
+        {/* Video — always in DOM, hidden until hover */}
         {isVideo && project.media_url && (
           <video
             ref={videoRef}
             muted
             loop
             playsInline
-            preload="metadata"
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${isHovered ? "opacity-100" : "opacity-0"}`}
+            preload="auto"
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${hovered ? "opacity-100" : "opacity-0"}`}
           >
-            <source src={project.media_url} />
+            <source src={project.media_url} type="video/mp4" />
           </video>
         )}
 
-        {/* Play icon */}
-        {isVideo && !isHovered && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
-              <svg className="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+        {/* Play icon — only when not hovered AND is video */}
+        {isVideo && !hovered && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-black/60 flex items-center justify-center">
+              <svg className="w-4 h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z" />
               </svg>
             </div>
           </div>
         )}
 
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-transparent to-transparent" />
+        {/* Gradient overlay bottom */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
 
         {/* Content */}
         <div className="absolute bottom-0 left-0 right-0 p-4">
@@ -94,11 +83,9 @@ export default function ProjectCard({ project }: { project: Project }) {
         </div>
 
         {project.featured && (
-          <div className="absolute top-3 right-3 bg-[#01F17C] text-[#050505] text-xs font-bold px-2 py-0.5 rounded-full">
-            Featured
-          </div>
+          <div className="absolute top-3 right-3 bg-[#01F17C] text-[#050505] text-xs font-bold px-2 py-0.5 rounded-full">Featured</div>
         )}
-      </motion.div>
+      </div>
     </Link>
   );
 }

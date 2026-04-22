@@ -4,6 +4,7 @@ import ServicesSection from "@/components/sections/ServicesSection";
 import PortfolioPreview from "@/components/sections/PortfolioPreview";
 import StatsSection from "@/components/sections/StatsSection";
 import AboutTeaser from "@/components/sections/AboutTeaser";
+import InstagramSection from "@/components/sections/InstagramSection";
 import CTABanner from "@/components/sections/CTABanner";
 
 export default function HomePage() {
@@ -15,6 +16,7 @@ export default function HomePage() {
       <PortfolioPreview />
       <StatsSection />
       <AboutTeaser />
+      <InstagramSection />
       <CTABanner />
     </>
   );

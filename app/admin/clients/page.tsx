@@ -110,7 +110,7 @@ export default function AdminClientsPage() {
                     <button onClick={() => toggleActive(c)} className={`text-xs px-2 py-0.5 rounded-full font-semibold transition-colors ${c.active ? "text-[#01F17C] bg-[#01F17C]/10" : "text-[#555] bg-white/5"}`}>
                       {c.active ? "On" : "Off"}
                     </button>
-                    <button onClick={() => handleDelete(c.id)} className="text-xs text-[#666] hover:text-red-400 transition-colors">×</button>
+                    <button onClick={() => handleDelete(c.id)} className="text-xs px-2 py-1 rounded-lg text-red-400 bg-red-400/10 hover:bg-red-400/20 transition-colors font-semibold">Delete</button>
                   </div>
                 </div>
               ))}

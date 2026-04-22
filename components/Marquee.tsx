@@ -47,7 +47,6 @@ export default function Marquee() {
     ? clients.map((c) => ({ name: c.name, logo: c.logo_url ?? "" }))
     : defaultLogos;
 
-  // Duplicate for seamless loop
   const doubled = [...logos, ...logos];
 
   return (
@@ -78,19 +77,21 @@ export default function Marquee() {
           {doubled.map((item, i) => (
             <div
               key={i}
-              className="flex items-center justify-center mx-10 opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300 flex-shrink-0"
+              className="flex items-center justify-center flex-shrink-0 mx-8 opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300"
+              style={{ width: "140px", height: "56px" }}
             >
               {item.logo ? (
                 <Image
                   src={item.logo}
                   alt={item.name}
-                  width={120}
-                  height={44}
-                  className="object-contain h-11 w-auto max-w-[120px]"
+                  width={140}
+                  height={56}
+                  className="object-contain"
+                  style={{ maxHeight: "56px", width: "auto", maxWidth: "140px" }}
                   unoptimized
                 />
               ) : (
-                <span className="text-sm font-bold uppercase tracking-wider text-[#111111] whitespace-nowrap">
+                <span className="text-sm font-bold uppercase tracking-wider text-[#111111] whitespace-nowrap text-center">
                   {item.name}
                 </span>
               )}
