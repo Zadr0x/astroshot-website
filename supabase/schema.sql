@@ -179,3 +179,16 @@ INSERT INTO site_content (key, value, label, section) VALUES
 ON CONFLICT (key) DO NOTHING;
 
 -- Bucket: hero-video (public) - for homepage hero video
+
+-- Storage policies (run these in Supabase SQL editor)
+INSERT INTO storage.buckets (id, name, public) VALUES ('thumbnails', 'thumbnails', true) ON CONFLICT DO NOTHING;
+INSERT INTO storage.buckets (id, name, public) VALUES ('media', 'media', true) ON CONFLICT DO NOTHING;
+INSERT INTO storage.buckets (id, name, public) VALUES ('project-images', 'project-images', true) ON CONFLICT DO NOTHING;
+INSERT INTO storage.buckets (id, name, public) VALUES ('blog-covers', 'blog-covers', true) ON CONFLICT DO NOTHING;
+INSERT INTO storage.buckets (id, name, public) VALUES ('client-logos', 'client-logos', true) ON CONFLICT DO NOTHING;
+INSERT INTO storage.buckets (id, name, public) VALUES ('hero-video', 'hero-video', true) ON CONFLICT DO NOTHING;
+
+CREATE POLICY "Public read all storage" ON storage.objects FOR SELECT USING (true);
+CREATE POLICY "Auth upload storage" ON storage.objects FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "Auth update storage" ON storage.objects FOR UPDATE USING (auth.role() = 'authenticated');
+CREATE POLICY "Auth delete storage" ON storage.objects FOR DELETE USING (auth.role() = 'authenticated');

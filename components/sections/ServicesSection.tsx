@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 
 const services = [
@@ -9,6 +10,7 @@ const services = [
     description:
       "Hyper-real campaigns that stop people mid-scroll. From cinematic product shots to full VFX sequences.",
     tags: ["Visual Effects", "CGI", "Motion Graphics"],
+    slug: "vfx",
   },
   {
     icon: "◈",
@@ -16,6 +18,7 @@ const services = [
     description:
       "Strategy, content, and management that drives real growth. We turn followers into loyal customers.",
     tags: ["Strategy", "Content", "Management"],
+    slug: "social",
   },
   {
     icon: "◉",
@@ -23,6 +26,7 @@ const services = [
     description:
       "Identity systems that make you impossible to forget. From logo to full brand guidelines.",
     tags: ["Identity", "Brand Guidelines", "Design"],
+    slug: "branding",
   },
   {
     icon: "⬡",
@@ -30,12 +34,13 @@ const services = [
     description:
       "Motion that makes your product the hero. Stunning 3D renders and animation for any platform.",
     tags: ["3D Renders", "Product Animation", "Architecture"],
+    slug: "animation",
   },
 ];
 
 export default function ServicesSection() {
   return (
-    <section id="services" className="py-24 lg:py-32 bg-[#FAFAFA]">
+    <section id="services" className="py-16 lg:py-20 bg-[#FAFAFA]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           className="text-center mb-16"
@@ -64,30 +69,33 @@ export default function ServicesSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="group relative bg-white rounded-2xl p-7 border border-[#f0f0f0] hover:border-[#01F17C]/30 transition-all duration-300 hover:shadow-lg hover:shadow-[#01F17C]/5"
             >
-              {/* Green top accent */}
-              <div className="absolute top-0 left-6 right-6 h-0.5 bg-gradient-to-r from-[#36FF9D] to-[#01F17C] rounded-full" />
+              <Link href={`/services#${service.slug}`} className="block h-full">
+                <div className="group relative bg-white rounded-2xl p-7 border border-[#f0f0f0] hover:border-[#01F17C]/30 transition-all duration-300 hover:shadow-lg hover:shadow-[#01F17C]/5 cursor-pointer h-full hover:scale-[1.02]">
+                  {/* Green top accent */}
+                  <div className="absolute top-0 left-6 right-6 h-0.5 bg-gradient-to-r from-[#36FF9D] to-[#01F17C] rounded-full" />
 
-              <div className="mt-4">
-                <span className="text-2xl text-[#01F17C]">{service.icon}</span>
-                <h3 className="mt-4 text-lg font-800 text-[#111111]">
-                  {service.title}
-                </h3>
-                <p className="mt-3 text-sm text-[#666666] leading-relaxed">
-                  {service.description}
-                </p>
-                <div className="mt-5 flex flex-wrap gap-1.5">
-                  {service.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-xs font-500 px-2.5 py-1 bg-[#f5f5f5] text-[#666666] rounded-full"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                  <div className="mt-4">
+                    <span className="text-2xl text-[#01F17C]">{service.icon}</span>
+                    <h3 className="mt-4 text-lg font-800 text-[#111111]">
+                      {service.title}
+                    </h3>
+                    <p className="mt-3 text-sm text-[#666666] leading-relaxed">
+                      {service.description}
+                    </p>
+                    <div className="mt-5 flex flex-wrap gap-1.5">
+                      {service.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-xs font-500 px-2.5 py-1 bg-[#f5f5f5] text-[#666666] rounded-full"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </Link>
             </motion.div>
           ))}
         </div>

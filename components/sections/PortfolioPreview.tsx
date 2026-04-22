@@ -38,7 +38,7 @@ export default function PortfolioPreview() {
   const placeholderCount = Math.max(0, 6 - projects.length);
 
   return (
-    <section className="py-24 lg:py-32 bg-[#FAFAFA]">
+    <section className="py-16 lg:py-20 bg-[#FAFAFA]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12"

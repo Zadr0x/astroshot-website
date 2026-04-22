@@ -104,10 +104,20 @@ export const supabase: SupabaseClient<AnyDB> = new Proxy(
 );
 
 export async function uploadFile(file: File, bucket: string): Promise<string | null> {
+  const client = getSupabase();
   const ext = file.name.split(".").pop();
   const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-  const { error } = await getSupabase().storage.from(bucket).upload(path, file);
-  if (error) return null;
-  const { data } = getSupabase().storage.from(bucket).getPublicUrl(path);
-  return data.publicUrl;
+
+  const { data, error } = await client.storage.from(bucket).upload(path, file, {
+    upsert: true,
+    cacheControl: "3600",
+  });
+
+  if (error) {
+    console.error("Upload failed:", bucket, error);
+    return null;
+  }
+
+  const { data: urlData } = client.storage.from(bucket).getPublicUrl(data.path);
+  return urlData.publicUrl;
 }
