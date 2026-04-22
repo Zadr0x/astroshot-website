@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import type { Project } from "@/lib/supabase";
@@ -18,6 +18,18 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ project }: ProjectCardProps) {
   const [hovered, setHovered] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const isVideo = project.media_type === "video" && !!project.media_url;
+
+  useEffect(() => {
+    if (!videoRef.current) return;
+    if (hovered) {
+      videoRef.current.play().catch(() => {});
+    } else {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+  }, [hovered]);
 
   return (
     <motion.div
@@ -29,30 +41,43 @@ export default function ProjectCard({ project }: ProjectCardProps) {
       viewport={{ once: true }}
       transition={{ duration: 0.4 }}
     >
-      {/* Thumbnail or gradient placeholder */}
+      {/* Thumbnail */}
       {project.thumbnail_url ? (
         <Image
           src={project.thumbnail_url}
           alt={project.title}
           fill
-          className={`object-cover transition-transform duration-500 ${
-            hovered ? "scale-105" : "scale-100"
+          className={`object-cover transition-all duration-500 ${
+            hovered && isVideo ? "opacity-0 scale-105" : "opacity-100 scale-100"
           }`}
         />
       ) : (
         <div className="absolute inset-0 bg-gradient-to-br from-[#36FF9D]/20 via-[#01F17C]/10 to-[#050505]" />
       )}
 
-      {/* Video on hover */}
-      {hovered && project.media_url && project.media_type === "video" && (
+      {/* Video — always mounted for video projects, shown/hidden via opacity */}
+      {isVideo && (
         <video
-          src={project.media_url}
-          autoPlay
+          ref={videoRef}
+          src={project.media_url!}
           muted
           loop
           playsInline
-          className="absolute inset-0 w-full h-full object-cover"
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+            hovered ? "opacity-100" : "opacity-0"
+          }`}
         />
+      )}
+
+      {/* Play button overlay — visible on non-hovered video cards */}
+      {isVideo && !hovered && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
+            <svg className="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </div>
+        </div>
       )}
 
       {/* Overlay */}
