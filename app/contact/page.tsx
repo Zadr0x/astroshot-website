@@ -62,9 +62,10 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-[#FAFAFA] pt-24">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-          {/* Left info */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:grid-flow-row">
+          {/* Left info — shows second on mobile, first on desktop */}
           <motion.div
+            className="order-2 lg:order-1"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
@@ -103,7 +104,7 @@ export default function ContactPage() {
             </div>
 
             <div className="mt-10 p-6 rounded-2xl bg-[#050505] text-white">
-              <p className="text-xs font-bold uppercase tracking-widest text-[#01F17C] mb-2">
+              <p className="text-xs font-bold uppercase tracking-widest text-[#00a855] mb-2">
                 Office
               </p>
               <p className="text-sm text-white/70 leading-relaxed">
@@ -116,8 +117,9 @@ export default function ContactPage() {
             </div>
           </motion.div>
 
-          {/* Form */}
+          {/* Form — shows first on mobile, second on desktop */}
           <motion.div
+            className="order-1 lg:order-2"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}

@@ -42,7 +42,7 @@ export default function PortfolioPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <span className="text-xs font-700 uppercase tracking-[0.25em] text-[#01F17C]">
+          <span className="text-xs font-700 uppercase tracking-[0.25em] text-[#00a855]">
             Portfolio
           </span>
           <h1 className="mt-3 text-5xl lg:text-6xl font-800 text-[#111111] tracking-tight">

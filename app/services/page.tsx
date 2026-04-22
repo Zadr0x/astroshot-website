@@ -88,7 +88,7 @@ export default function ServicesPage() {
     <div className="min-h-screen bg-[#FAFAFA] pt-24">
       {/* Hero */}
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 pb-0">
-        <span className="text-xs font-700 uppercase tracking-[0.25em] text-[#01F17C]">
+        <span className="text-xs font-700 uppercase tracking-[0.25em] text-[#00a855]">
           Services
         </span>
         <h1 className="mt-3 text-5xl lg:text-6xl font-800 text-[#111111] tracking-tight max-w-2xl">

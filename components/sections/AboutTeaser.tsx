@@ -16,7 +16,7 @@ export default function AboutTeaser() {
             transition={{ duration: 0.6 }}
             className="pl-6 border-l-4 border-[#01F17C]"
           >
-            <span className="text-xs font-700 uppercase tracking-[0.25em] text-[#01F17C]">
+            <span className="text-xs font-700 uppercase tracking-[0.25em] text-[#00a855]">
               About Us
             </span>
             <h2 className="mt-4 text-3xl lg:text-4xl font-800 text-[#111111] leading-tight">

@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60">
-  <text x="100" y="28" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#003087" text-anchor="middle" letter-spacing="1">GULF</text>
-  <text x="100" y="50" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#003087" text-anchor="middle" letter-spacing="1">BANK</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80">
+  <text x="100" y="34" font-family="Arial,sans-serif" font-size="20" font-weight="700" fill="#003087" text-anchor="middle" letter-spacing="2">GULF</text>
+  <text x="100" y="58" font-family="Arial,sans-serif" font-size="20" font-weight="700" fill="#003087" text-anchor="middle" letter-spacing="2">BANK</text>
 </svg>

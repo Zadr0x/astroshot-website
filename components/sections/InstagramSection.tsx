@@ -20,7 +20,7 @@ export default function InstagramSection() {
   return (
     <section className="py-16 bg-white overflow-hidden">
       <div className="text-center mb-10">
-        <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#01F17C]">
+        <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#00a855]">
           Instagram
         </span>
         <h2 className="mt-3 text-3xl lg:text-4xl font-black text-[#111111] tracking-tight">

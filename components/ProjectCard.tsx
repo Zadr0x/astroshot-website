@@ -46,7 +46,7 @@ export default function ProjectCard({ project }: { project: Project }) {
           />
         )}
 
-        {/* Video — always in DOM, hidden until hover */}
+        {/* Video — always in DOM, hidden until ready AND hovered */}
         {isVideo && project.media_url && (
           <video
             ref={videoRef}
@@ -54,6 +54,7 @@ export default function ProjectCard({ project }: { project: Project }) {
             loop
             playsInline
             preload="auto"
+            onCanPlay={(e) => { (e.target as HTMLVideoElement).dataset.ready = "1"; }}
             className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${hovered ? "opacity-100" : "opacity-0"}`}
           >
             <source src={project.media_url} type="video/mp4" />
@@ -62,7 +63,7 @@ export default function ProjectCard({ project }: { project: Project }) {
 
         {/* Play icon — only when not hovered AND is video */}
         {isVideo && !hovered && (
-          <div className="absolute inset-0 flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="w-10 h-10 rounded-full bg-black/60 flex items-center justify-center">
               <svg className="w-4 h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z" />

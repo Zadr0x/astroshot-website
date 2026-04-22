@@ -54,7 +54,7 @@ export default function AboutPage() {
       {/* Hero */}
       <div className="bg-[#050505] py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <span className="text-xs font-700 uppercase tracking-[0.25em] text-[#01F17C]">
+          <span className="text-xs font-700 uppercase tracking-[0.25em] text-[#00a855]">
             About Astroshot
           </span>
           <h1 className="mt-3 text-5xl lg:text-7xl font-800 text-white tracking-tight max-w-3xl leading-tight">
@@ -143,7 +143,7 @@ export default function AboutPage() {
       {/* Clients */}
       <div className="bg-[#050505] py-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <h2 className="text-xs font-700 uppercase tracking-[0.25em] text-[#01F17C] mb-8">
+          <h2 className="text-xs font-700 uppercase tracking-[0.25em] text-[#00a855] mb-8">
             Brands We&apos;ve Worked With
           </h2>
           <div className="flex flex-wrap gap-3">
