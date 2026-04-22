@@ -35,6 +35,8 @@ export default function PortfolioPreview() {
       });
   }, []);
 
+  const placeholderCount = Math.max(0, 6 - projects.length);
+
   return (
     <section className="py-24 lg:py-32 bg-[#FAFAFA]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -61,30 +63,31 @@ export default function PortfolioPreview() {
           </Link>
         </motion.div>
 
-        {!loading && projects.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-5">
-            {projects.map((project, i) => (
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          {/* Real projects */}
+          {!loading && projects.map((project, i) => (
+            <motion.div
+              key={project.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.08 }}
+            >
+              <ProjectCard project={project} />
+            </motion.div>
+          ))}
+
+          {/* Placeholder cards to fill remaining slots */}
+          {Array.from({ length: loading ? 6 : placeholderCount }).map((_, i) => {
+            const gradientIndex = loading ? i : projects.length + i;
+            return (
               <motion.div
-                key={project.id}
+                key={`placeholder-${i}`}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
-              >
-                <ProjectCard project={project} />
-              </motion.div>
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-5">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
-                className={`group relative rounded-2xl overflow-hidden bg-gradient-to-br ${gradients[i]} aspect-[9/16] flex items-center justify-center border border-white/5 ${loading ? "animate-pulse" : ""}`}
+                transition={{ duration: 0.4, delay: (loading ? i : projects.length + i) * 0.08 }}
+                className={`group relative rounded-2xl overflow-hidden bg-gradient-to-br ${gradients[gradientIndex % 6]} aspect-[4/5] flex items-center justify-center border border-white/5 ${loading ? "animate-pulse" : ""}`}
               >
                 {!loading && (
                   <div className="text-center p-6">
@@ -92,15 +95,15 @@ export default function PortfolioPreview() {
                       <span className="text-[#01F17C] text-lg">✦</span>
                     </div>
                     <p className="text-white/40 text-xs font-600 uppercase tracking-widest">
-                      {placeholderLabels[i]}
+                      {placeholderLabels[(projects.length + i) % 6]}
                     </p>
                     <p className="text-white/20 text-xs mt-1">Coming soon</p>
                   </div>
                 )}
               </motion.div>
-            ))}
-          </div>
-        )}
+            );
+          })}
+        </div>
       </div>
     </section>
   );

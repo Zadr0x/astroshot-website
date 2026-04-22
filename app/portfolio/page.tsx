@@ -76,7 +76,7 @@ export default function PortfolioPage() {
             {Array.from({ length: 8 }).map((_, i) => (
               <div
                 key={i}
-                className="rounded-2xl bg-[#f0f0f0] aspect-[9/16] animate-pulse"
+                className="rounded-2xl bg-[#f0f0f0] aspect-[4/5] animate-pulse"
               />
             ))}
           </div>

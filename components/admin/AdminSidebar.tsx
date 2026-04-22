@@ -13,6 +13,7 @@ const navItems = [
   { href: "/admin/clients", label: "Clients", icon: "★" },
   { href: "/admin/content", label: "Site Content", icon: "✦" },
   { href: "/admin/submissions", label: "Form Submissions", icon: "◎" },
+  { href: "/admin/careers", label: "Careers", icon: "◑" },
   { href: "/admin/settings", label: "Settings", icon: "⚙" },
 ];
 

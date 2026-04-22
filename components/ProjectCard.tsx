@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -18,27 +18,21 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ project }: ProjectCardProps) {
-  const [hovered, setHovered] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const isVideo = project.media_type === "video" && !!project.media_url;
   const clientName = (project as unknown as Record<string, unknown>).client_name as string | undefined;
 
-  useEffect(() => {
-    if (!videoRef.current) return;
-    if (hovered) {
-      videoRef.current.play().catch(() => {});
-    } else {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-    }
-  }, [hovered]);
-
   return (
     <Link href={`/portfolio/${project.id}`} className="block">
       <motion.div
-        className="group relative rounded-2xl overflow-hidden bg-[#111111] aspect-[9/16] cursor-pointer"
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
+        className="group relative rounded-2xl overflow-hidden bg-[#111111] aspect-[4/5] cursor-pointer"
+        onMouseEnter={() => {
+          videoRef.current?.play();
+        }}
+        onMouseLeave={() => {
+          videoRef.current?.pause();
+          if (videoRef.current) videoRef.current.currentTime = 0;
+        }}
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -50,15 +44,13 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             src={project.thumbnail_url}
             alt={project.title}
             fill
-            className={`object-cover transition-all duration-500 ${
-              hovered && isVideo ? "opacity-0 scale-105" : "opacity-100 scale-100"
-            }`}
+            className="object-cover transition-all duration-500 group-hover:[&:not(:has(~video[data-playing]))]:scale-105"
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-[#36FF9D]/20 via-[#01F17C]/10 to-[#050505]" />
         )}
 
-        {/* Video — always mounted for video projects, shown/hidden via opacity */}
+        {/* Video */}
         {isVideo && (
           <video
             ref={videoRef}
@@ -66,15 +58,15 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             muted
             loop
             playsInline
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
-              hovered ? "opacity-100" : "opacity-0"
-            }`}
+            preload="metadata"
+            onMouseEnter={() => videoRef.current?.play()}
+            className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500"
           />
         )}
 
-        {/* Play button overlay — visible on non-hovered video cards */}
-        {isVideo && !hovered && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        {/* Play button overlay */}
+        {isVideo && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
             <div className="w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
               <svg className="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z" />
@@ -84,11 +76,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         )}
 
         {/* Overlay */}
-        <div
-          className={`absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-[#050505]/20 to-transparent transition-opacity duration-300 ${
-            hovered ? "opacity-100" : "opacity-60"
-          }`}
-        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-[#050505]/20 to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
 
         {/* Content */}
         <div className="absolute bottom-0 left-0 right-0 p-5">
@@ -107,8 +95,8 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               {clientName} × Astroshot
             </p>
           )}
-          {project.description && hovered && (
-            <p className="text-white/60 text-xs mt-1 line-clamp-2">
+          {project.description && (
+            <p className="text-white/60 text-xs mt-1 line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               {project.description}
             </p>
           )}
