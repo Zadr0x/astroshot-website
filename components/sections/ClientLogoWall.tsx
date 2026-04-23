@@ -32,7 +32,7 @@ const clientLogos = [
   { name: 'Volkswagen', path: '/logos/volkswagen.svg' },
   { name: 'Lamborghini', path: '/logos/lamborghini.svg' },
   { name: 'Loreal', path: '/logos/loreal.svg' },
-  { name: 'Victoria's Secret', path: '/logos/victorias-secret.svg' },
+  { name: "Victoria's Secret", path: '/logos/victorias-secret.svg' },
   { name: 'Heads & Shoulders', path: '/logos/headandshoulders.svg' },
   { name: 'White Label', path: '/logos/white-label.svg' },
   { name: 'Dubai', path: '/logos/dubai.svg' },
