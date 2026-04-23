@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import ClientLogoWall from "@/components/sections/ClientLogoWall";
 
 export const metadata: Metadata = {
   title: "About — Kuwait's #1 Creative Agency",
@@ -7,31 +7,15 @@ export const metadata: Metadata = {
     "Learn about Astroshot Project Management Company — Kuwait's leading VFX, CGI, and creative agency with 500M+ organic views and 170+ clients across the GCC.",
 };
 
-const clients = [
-  "Mercedes",
-  "BMW",
-  "Honda",
-  "Ford",
-  "BYD",
-  "Hongqi",
-  "Gulf Bank",
-  "NBK",
-  "Zain",
-  "Virgin Mobile",
-  "IKEA",
-  "Costa Coffee",
-  "Caribou",
-  "Trolley",
-  "National Geographic",
-];
+
 
 const timeline = [
   {
-    year: "2016",
+    year: "2018",
     event: "Astroshot founded in Kuwait City with a team of 3.",
   },
   {
-    year: "2018",
+    year: "2020",
     event: "First automotive campaign for a major GCC brand. 10M+ views.",
   },
   {
@@ -58,7 +42,7 @@ export default function AboutPage() {
             About Astroshot
           </span>
           <h1 className="mt-3 text-5xl lg:text-7xl font-800 text-white tracking-tight max-w-3xl leading-tight">
-            We&apos;ve been making brands impossible to ignore since 2016.
+            We&apos;ve been making brands impossible to ignore since 2018.
           </h1>
         </div>
       </div>
@@ -141,23 +125,7 @@ export default function AboutPage() {
       </div>
 
       {/* Clients */}
-      <div className="bg-[#050505] py-16">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <h2 className="text-xs font-700 uppercase tracking-[0.25em] text-[#00a855] mb-8">
-            Brands We&apos;ve Worked With
-          </h2>
-          <div className="flex flex-wrap gap-3">
-            {clients.map((client) => (
-              <span
-                key={client}
-                className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white/60 text-sm font-500 hover:border-[#01F17C]/30 hover:text-white transition-colors"
-              >
-                {client}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
+<ClientLogoWall />
 
       {/* Address */}
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
