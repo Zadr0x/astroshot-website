@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from 'next/link';
 import ClientLogoWall from "@/components/sections/ClientLogoWall";
 
 export const metadata: Metadata = {
@@ -54,7 +55,7 @@ export default function AboutPage() {
             {[
               { number: "500M+", label: "Organic Views Generated" },
               { number: "170+", label: "Happy Clients" },
-              { number: "6+", label: "Years of Excellence" },
+              { number: "Since", label: "2018" },
             ].map((stat) => (
               <div
                 key={stat.label}
