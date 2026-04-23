@@ -54,7 +54,7 @@ export default function AboutPage() {
             {[
               { number: "500M+", label: "Organic Views Generated" },
               { number: "170+", label: "Happy Clients" },
-              { number: "8+", label: "Years of Excellence" },
+              { number: "6+", label: "Years of Excellence" },
             ].map((stat) => (
               <div
                 key={stat.label}
