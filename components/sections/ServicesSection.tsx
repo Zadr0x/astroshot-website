@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-const services = [
+export const services = [
   {
     icon: "◈",
     title: "Mixed Reality",

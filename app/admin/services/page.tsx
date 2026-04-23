@@ -1,17 +1,6 @@
 import { useState } from 'react';
 
-const initialServices = [
-  {
-    id: 1,
-    icon: "◈",
-    title: "Mixed Reality",
-    description:
-      "Mixed Reality videos that combine real footage with VFX to create viral, attention-grabbing content for brands, products, and campaigns. Astroshot produces mixed reality ads and VFX videos in Kuwait and across the GCC.",
-    tags: ["VFX", "Mixed Reality", "Viral Content"],
-    client_list: ["Mercedes", "Chevrolet", "BMW", "Ford", "BYD", "Cadillac"],
-  },
-  // ... more services
-];
+import { services as initialServices } from '@/components/sections/ServicesSection';
 
 export default function ServicesCmsPage() {
   const [services, setServices] = useState(initialServices);
@@ -38,7 +27,7 @@ export default function ServicesCmsPage() {
 function ServiceEditor({ service, onSave }) {
   const [title, setTitle] = useState(service.title);
   const [description, setDescription] = useState(service.description);
-  const [clients, setClients] = useState(service.client_list.join(', '));
+  const [clients, setClients] = useState((service.client_list || []).join(', '));
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
