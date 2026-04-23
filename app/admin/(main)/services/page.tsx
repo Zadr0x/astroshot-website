@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase';
 import ServiceEditor from '@/components/admin/ServiceEditor';
 
 export default function ServicesCmsPage() {
-  const [services, setServices] = useState([]);
+  const [services, setServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export default function ServicesCmsPage() {
     fetchServices();
   }, []);
 
-  const handleSave = async (serviceId, updatedData) => {
+  const handleSave = async (serviceId: string, updatedData: any) => {
     const { data, error } = await supabase
       .from('services')
       .update(updatedData)

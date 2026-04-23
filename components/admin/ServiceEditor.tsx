@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 
-export default function ServiceEditor({ service, onSave }) {
+export default function ServiceEditor({ service, onSave }: { service: any; onSave: (id: string, data: any) => void }) {
   const [title, setTitle] = useState(service.title || '');
   const [description, setDescription] = useState(service.description || '');
   const [saving, setSaving] = useState(false);
 
-  const handleFormSubmit = async (e) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
     await onSave(service.id, { title, description });
