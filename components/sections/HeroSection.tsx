@@ -10,8 +10,11 @@ export default function HeroSection() {
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const subRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
-  const [desktopVideoSrc, setDesktopVideoSrc] = useState("/hero-reel.mp4");
-  const [mobileVideoSrc, setMobileVideoSrc] = useState("/hero-reel-mobile.mp4");
+  const desktopVideoRef = useRef<HTMLVideoElement>(null);
+  const mobileVideoRef = useRef<HTMLVideoElement>(null);
+  const [desktopVideoSrc, setDesktopVideoSrc] = useState("");
+  const [mobileVideoSrc, setMobileVideoSrc] = useState("");
+  const [userInteracted, setUserInteracted] = useState(false);
 
   useEffect(() => {
     supabase
@@ -27,6 +30,31 @@ export default function HeroSection() {
       });
   }, []);
 
+  // Try to autoplay desktop video — handle browser autoplay policy
+  useEffect(() => {
+    if (!desktopVideoSrc || !desktopVideoRef.current) return;
+    const video = desktopVideoRef.current;
+    // Try play immediately
+    video.play().catch(() => {
+      // Browser blocked autoplay — wait for first user interaction
+      const tryPlay = () => {
+        video.play().catch(() => {});
+        setUserInteracted(true);
+        document.removeEventListener("click", tryPlay);
+        document.removeEventListener("touchstart", tryPlay);
+        document.removeEventListener("scroll", tryPlay);
+      };
+      document.addEventListener("click", tryPlay, { once: true });
+      document.addEventListener("touchstart", tryPlay, { once: true });
+      document.addEventListener("scroll", tryPlay, { once: true });
+    });
+  }, [desktopVideoSrc]);
+
+  useEffect(() => {
+    if (!mobileVideoSrc || !mobileVideoRef.current) return;
+    mobileVideoRef.current.play().catch(() => {});
+  }, [mobileVideoSrc]);
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
@@ -37,35 +65,51 @@ export default function HeroSection() {
     return () => ctx.revert();
   }, []);
 
+  const handleClick = () => {
+    if (!userInteracted) {
+      desktopVideoRef.current?.play().catch(() => {});
+      setUserInteracted(true);
+    }
+  };
+
   return (
     <section
       ref={containerRef}
-      className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-[#050505]"
+      onClick={handleClick}
+      className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-[#050505] cursor-default"
     >
-      {/* Desktop video (landscape) — hidden on mobile */}
-      <video
-        key={`desktop-${desktopVideoSrc}`}
-        className="hidden sm:block absolute inset-0 w-full h-full object-cover opacity-30"
-        src={desktopVideoSrc}
-        autoPlay
-        muted
-        loop
-        playsInline
-      />
+      {/* Desktop video */}
+      {desktopVideoSrc && (
+        <video
+          ref={desktopVideoRef}
+          key={desktopVideoSrc}
+          className="hidden sm:block absolute inset-0 w-full h-full object-cover opacity-40"
+          src={desktopVideoSrc}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+        />
+      )}
 
-      {/* Mobile video (portrait/vertical) — hidden on desktop */}
-      <video
-        key={`mobile-${mobileVideoSrc}`}
-        className="block sm:hidden absolute inset-0 w-full h-full object-cover opacity-30"
-        src={mobileVideoSrc}
-        autoPlay
-        muted
-        loop
-        playsInline
-      />
+      {/* Mobile video */}
+      {mobileVideoSrc && (
+        <video
+          ref={mobileVideoRef}
+          key={mobileVideoSrc}
+          className="block sm:hidden absolute inset-0 w-full h-full object-cover opacity-40"
+          src={mobileVideoSrc}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+        />
+      )}
 
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/60 via-transparent to-[#050505]/80" />
+      {/* Dark fallback bg */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/70 via-[#050505]/30 to-[#050505]/80" />
 
       {/* Content */}
       <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8 text-center">
@@ -88,24 +132,15 @@ export default function HeroSection() {
           </span>
         </h1>
 
-        <p
-          ref={subRef}
-          className="mt-6 text-base sm:text-lg text-white/60 font-400 tracking-wide max-w-xl mx-auto"
-        >
+        <p ref={subRef} className="mt-6 text-base sm:text-lg text-white/60 font-400 tracking-wide max-w-xl mx-auto">
           VFX · CGI · Social Media · Branding — Kuwait &amp; GCC
         </p>
 
         <div ref={ctaRef} className="mt-10 flex items-center justify-center gap-4">
-          <Link
-            href="/portfolio"
-            className="px-8 py-4 text-sm font-700 rounded-2xl border-2 border-[#01F17C] text-[#01F17C] hover:bg-[#01F17C] hover:text-[#050505] transition-all duration-300"
-          >
+          <Link href="/portfolio" className="px-8 py-4 text-sm font-700 rounded-2xl border-2 border-[#01F17C] text-[#01F17C] hover:bg-[#01F17C] hover:text-[#050505] transition-all duration-300">
             See Our Work
           </Link>
-          <Link
-            href="/contact"
-            className="px-8 py-4 text-sm font-700 rounded-2xl bg-white/10 text-white hover:bg-white/20 transition-all duration-300 backdrop-blur-sm"
-          >
+          <Link href="/contact" className="px-8 py-4 text-sm font-700 rounded-2xl bg-white/10 text-white hover:bg-white/20 transition-all duration-300 backdrop-blur-sm">
             Let&apos;s Talk
           </Link>
         </div>
