@@ -48,7 +48,7 @@ export const services = [
 
 export default function ServicesSection() {
   return (
-    <section id="services" className="py-16 lg:py-20 bg-[#FAFAFA]">
+    <section id="services" className="py-24 lg:py-32 bg-[#050505]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           className="text-center mb-16"
@@ -57,13 +57,13 @@ export default function ServicesSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <span className="text-xs font-700 uppercase tracking-[0.25em] text-[#00a855]">
+          <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#01F17C]">
             What We Do
           </span>
-          <h2 className="mt-3 text-4xl lg:text-5xl font-800 text-[#111111] tracking-tight">
+          <h2 className="mt-3 text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
             Services
           </h2>
-          <p className="mt-4 text-[#666666] max-w-md mx-auto text-base">
+          <p className="mt-4 text-white/60 max-w-md mx-auto text-base">
             End-to-end creative production for brands that refuse to be ordinary.
           </p>
         </motion.div>
@@ -78,16 +78,16 @@ export default function ServicesSection() {
               transition={{ duration: 0.5, delay: i * 0.1 }}
             >
               <Link href={`/services#${service.slug}`} className="block h-full">
-                <div className="group relative bg-white rounded-2xl p-7 border border-[#f0f0f0] hover:border-[#01F17C]/30 transition-all duration-300 hover:shadow-lg hover:shadow-[#01F17C]/5 cursor-pointer h-full hover:scale-[1.02]">
+                <div className="group relative bg-[#0d0d0d] rounded-2xl p-7 border border-white/10 hover:border-[#01F17C]/40 transition-all duration-300 hover:shadow-lg hover:shadow-[#01F17C]/10 cursor-pointer h-full hover:-translate-y-1">
                   {/* Green top accent */}
                   <div className="absolute top-0 left-6 right-6 h-0.5 bg-gradient-to-r from-[#36FF9D] to-[#01F17C] rounded-full" />
                   <div className="mt-4">
                     <span className="text-2xl text-[#01F17C]">{service.icon}</span>
-                    <h3 className="mt-4 text-lg font-800 text-[#111111]">{service.title}</h3>
-                    <p className="mt-3 text-sm text-[#666666] leading-relaxed">{service.description}</p>
+                    <h3 className="mt-4 text-lg font-extrabold text-white">{service.title}</h3>
+                    <p className="mt-3 text-sm text-white/60 leading-relaxed">{service.description}</p>
                     <div className="mt-5 flex flex-wrap gap-1.5">
                       {service.tags.map((tag) => (
-                        <span key={tag} className="text-xs font-500 px-2.5 py-1 bg-[#f5f5f5] text-[#666666] rounded-full">
+                        <span key={tag} className="text-xs font-medium px-2.5 py-1 bg-white/5 text-white/70 rounded-full border border-white/10">
                           {tag}
                         </span>
                       ))}

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { motion } from "framer-motion";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -81,56 +80,67 @@ const services = [
 
 export default function ServicesPage() {
   return (
-    <div className="min-h-screen bg-[#FAFAFA] pt-24">
+    <div className="min-h-screen bg-[#050505] pt-24">
       {/* Hero */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 pb-0">
-        <span className="text-xs font-700 uppercase tracking-[0.25em] text-[#00a855]">
-          Services
-        </span>
-        <h1 className="mt-3 text-5xl lg:text-6xl font-800 text-[#111111] tracking-tight max-w-2xl">
-          Everything You Need to Win
-        </h1>
-        <p className="mt-4 text-[#666666] text-base max-w-lg">
-          Four core disciplines. One studio. Fully integrated, obsessively
-          executed.
-        </p>
+      <div className="relative overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse at 10% 20%, rgba(1,241,124,0.1), transparent 55%)",
+          }}
+        />
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-24">
+          <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#01F17C]">
+            Services
+          </span>
+          <h1 className="mt-3 text-5xl lg:text-7xl font-extrabold text-white tracking-tight max-w-3xl leading-[1.05]">
+            Everything You Need to Win
+          </h1>
+          <p className="mt-5 text-white/60 text-base max-w-lg">
+            Four core disciplines. One studio. Fully integrated, obsessively
+            executed.
+          </p>
+        </div>
       </div>
 
       {/* Services */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 space-y-4">
-        {services.map((service, i) => (
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-20 space-y-5">
+        {services.map((service) => (
           <div
             key={service.id}
             id={service.id}
-            className="rounded-2xl bg-white border border-[#f0f0f0] p-8 lg:p-12 scroll-mt-24"
+            className="rounded-2xl bg-[#0d0d0d] border border-white/10 p-8 lg:p-12 scroll-mt-24 hover:border-[#01F17C]/30 transition-colors"
           >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
               <div>
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="text-xs font-700 text-[#01F17C] uppercase tracking-widest">
+                  <span className="text-xs font-bold text-[#01F17C] uppercase tracking-widest">
                     {service.number}
                   </span>
-                  <div className="h-px flex-1 bg-[#f0f0f0] max-w-[40px]" />
+                  <div className="h-px flex-1 bg-white/10 max-w-[40px]" />
                 </div>
-                <h2 className="text-3xl lg:text-4xl font-800 text-[#111111] tracking-tight">
+                <h2 className="text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
                   {service.title}
                 </h2>
-                <p className="mt-1 text-lg font-600 text-[#01F17C]">
+                <p className="mt-1 text-lg font-semibold text-[#01F17C]">
                   {service.headline}
                 </p>
-                <p className="mt-4 text-[#666666] leading-relaxed">
+                <p className="mt-4 text-white/70 leading-relaxed">
                   {service.description}
                 </p>
-
               </div>
               <div>
-                <h3 className="text-xs font-700 uppercase tracking-widest text-[#999999] mb-4">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-white/50 mb-4">
                   What&apos;s Included
                 </h3>
                 <ul className="space-y-3">
                   {service.deliverables.map((d) => (
-                    <li key={d} className="flex items-center gap-3 text-sm text-[#111111]">
-                      <span className="w-5 h-5 rounded-full bg-[#01F17C]/10 flex items-center justify-center flex-shrink-0">
+                    <li
+                      key={d}
+                      className="flex items-center gap-3 text-sm text-white/90"
+                    >
+                      <span className="w-5 h-5 rounded-full bg-[#01F17C]/15 border border-[#01F17C]/30 flex items-center justify-center flex-shrink-0">
                         <span className="text-[#01F17C] text-xs">✓</span>
                       </span>
                       {d}
@@ -144,17 +154,24 @@ export default function ServicesPage() {
       </div>
 
       {/* CTA */}
-      <div className="bg-[#050505] py-20 mt-8">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-3xl lg:text-4xl font-800 text-white">
+      <div className="relative overflow-hidden py-24 lg:py-32">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, rgba(1,241,124,0.1), transparent 60%)",
+          }}
+        />
+        <div className="relative max-w-3xl mx-auto px-6 text-center">
+          <h2 className="text-3xl lg:text-5xl font-extrabold text-white tracking-tight">
             Not sure which service you need?
           </h2>
-          <p className="mt-4 text-[#666666]">
+          <p className="mt-4 text-white/60">
             We&apos;ll figure it out together.
           </p>
           <Link
             href="/contact"
-            className="mt-8 inline-block px-8 py-4 text-sm font-700 rounded-2xl bg-[#01F17C] text-[#050505] hover:bg-[#00d96e] transition-colors"
+            className="mt-8 inline-block px-8 py-4 text-sm font-bold rounded-2xl bg-[#01F17C] text-[#050505] hover:bg-[#00d96e] transition-colors"
           >
             Get a Free Consultation
           </Link>

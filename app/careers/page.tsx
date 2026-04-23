@@ -28,8 +28,8 @@ const roles = [
 
 export default function CareersPage() {
   return (
-    <div className="min-h-screen bg-[#FAFAFA] pt-24">
-      <div className="max-w-5xl mx-auto px-6 lg:px-8 py-16">
+    <div className="min-h-screen bg-[#050505] pt-24">
+      <div className="max-w-5xl mx-auto px-6 lg:px-8 py-16 lg:py-20">
         {/* Hero */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -40,10 +40,10 @@ export default function CareersPage() {
           <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#01F17C]">
             Careers
           </span>
-          <h1 className="mt-3 text-5xl lg:text-6xl font-black text-[#111111] tracking-tight leading-tight">
+          <h1 className="mt-3 text-5xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.05]">
             Join the Team
           </h1>
-          <p className="mt-5 text-[#666666] text-base max-w-lg leading-relaxed">
+          <p className="mt-5 text-white/60 text-base max-w-lg leading-relaxed">
             We are always looking for exceptional creative minds in Kuwait. If you make things that stop the scroll, you belong here.
           </p>
         </motion.div>
@@ -54,7 +54,7 @@ export default function CareersPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
-          <h2 className="text-xs font-bold uppercase tracking-[0.25em] text-[#999999] mb-8">
+          <h2 className="text-xs font-bold uppercase tracking-[0.25em] text-white/50 mb-8">
             Current Openings
           </h2>
           <div className="space-y-5">
@@ -64,23 +64,23 @@ export default function CareersPage() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.15 + i * 0.1 }}
-                className="bg-white rounded-2xl border border-[#f0f0f0] p-8 flex flex-col sm:flex-row sm:items-start justify-between gap-6"
+                className="bg-[#0d0d0d] rounded-2xl border border-white/10 p-8 flex flex-col sm:flex-row sm:items-start justify-between gap-6 hover:border-[#01F17C]/30 transition-colors"
               >
                 <div className="flex-1">
                   <div className="flex flex-wrap items-center gap-3 mb-3">
-                    <h3 className="text-xl font-black text-[#111111]">{role.title}</h3>
-                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-[#01F17C]/10 text-[#01F17C]">
+                    <h3 className="text-xl font-extrabold text-white">{role.title}</h3>
+                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-[#01F17C]/15 border border-[#01F17C]/30 text-[#01F17C]">
                       {role.type}
                     </span>
-                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-[#f0f0f0] text-[#666666]">
+                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-white/70">
                       {role.location}
                     </span>
                   </div>
-                  <p className="text-[#666666] text-sm leading-relaxed">{role.description}</p>
+                  <p className="text-white/65 text-sm leading-relaxed">{role.description}</p>
                 </div>
                 <a
                   href={`mailto:info@astroshotpm.com?subject=Application: ${encodeURIComponent(role.title)}`}
-                  className="shrink-0 self-start sm:self-center px-6 py-3 rounded-xl bg-[#111111] text-white text-sm font-bold hover:bg-[#01F17C] hover:text-[#050505] transition-colors whitespace-nowrap"
+                  className="shrink-0 self-start sm:self-center px-6 py-3 rounded-xl bg-[#01F17C] text-[#050505] text-sm font-bold hover:bg-[#00d96e] transition-colors whitespace-nowrap"
                 >
                   Apply Now →
                 </a>
@@ -94,7 +94,7 @@ export default function CareersPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="mt-16 p-8 rounded-2xl bg-[#050505] text-center"
+          className="mt-16 p-10 rounded-2xl bg-gradient-to-br from-[#0d0d0d] to-[#050505] border border-white/10 text-center"
         >
           <p className="text-white/60 text-sm mb-2">Don&apos;t see your role?</p>
           <p className="text-white font-bold text-base mb-4">

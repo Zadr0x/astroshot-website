@@ -50,9 +50,9 @@ export default function Marquee() {
   const doubled = [...logos, ...logos];
 
   return (
-    <section className="py-12 bg-white border-y border-[#f0f0f0] overflow-hidden">
+    <section className="py-12 bg-[#050505] border-y border-white/5 overflow-hidden">
       <div className="text-center mb-8">
-        <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#999999]">
+        <span className="text-xs font-bold uppercase tracking-[0.25em] text-white/40">
           Trusted By
         </span>
       </div>
@@ -77,7 +77,7 @@ export default function Marquee() {
           {doubled.map((item, i) => (
             <div
               key={i}
-              className="flex items-center justify-center flex-shrink-0 mx-8 opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300"
+              className="flex items-center justify-center flex-shrink-0 mx-8 opacity-50 grayscale hover:opacity-100 transition-all duration-300"
               style={{ width: "140px", height: "56px" }}
             >
               {item.logo ? (
@@ -86,12 +86,12 @@ export default function Marquee() {
                   alt={item.name}
                   width={140}
                   height={56}
-                  className="object-contain"
+                  className="object-contain invert brightness-200"
                   style={{ maxHeight: "56px", width: "auto", maxWidth: "140px" }}
                   unoptimized
                 />
               ) : (
-                <span className="text-sm font-bold uppercase tracking-wider text-[#111111] whitespace-nowrap text-center">
+                <span className="text-sm font-bold uppercase tracking-wider text-white/80 whitespace-nowrap text-center">
                   {item.name}
                 </span>
               )}

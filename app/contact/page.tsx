@@ -50,7 +50,9 @@ export default function ContactPage() {
     });
 
     if (err) {
-      setError("Something went wrong. Please email us directly at info@astroshotpm.com");
+      setError(
+        "Something went wrong. Please email us directly at info@astroshotpm.com"
+      );
       setSubmitting(false);
       return;
     }
@@ -59,19 +61,24 @@ export default function ContactPage() {
     setSubmitting(false);
   };
 
+  const inputClass =
+    "w-full px-4 py-3 rounded-xl border border-white/10 bg-white/5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#01F17C] focus:bg-white/[0.07] transition-colors";
+
   return (
-    <div className="min-h-screen bg-[#FAFAFA] pt-24">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+    <div className="min-h-screen bg-[#050505] pt-24">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-20">
         {/* Mobile-only headline above the form */}
         <div className="block lg:hidden mb-8">
-          <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#00a855]">Contact</span>
-          <h1 className="mt-2 text-3xl font-black text-[#111111] tracking-tight leading-tight">
+          <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#01F17C]">
+            Contact
+          </span>
+          <h1 className="mt-2 text-4xl font-extrabold text-white tracking-tight leading-tight">
             Let&apos;s Build Something Extraordinary
           </h1>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:grid-flow-row">
-          {/* Left info — shows second on mobile, first on desktop */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 lg:grid-flow-row">
+          {/* Left info */}
           <motion.div
             className="order-2 lg:order-1 hidden lg:block"
             initial={{ opacity: 0, x: -20 }}
@@ -81,10 +88,10 @@ export default function ContactPage() {
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#01F17C]">
               Contact
             </span>
-            <h1 className="mt-3 text-5xl lg:text-6xl font-black text-[#111111] tracking-tight leading-tight">
+            <h1 className="mt-3 text-5xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.05]">
               Let&apos;s Build Something Extraordinary
             </h1>
-            <p className="mt-6 text-[#666666] text-base leading-relaxed max-w-md">
+            <p className="mt-6 text-white/60 text-base leading-relaxed max-w-md">
               Ready to make your brand impossible to ignore? Drop us a message
               and we&apos;ll come back to you within one business day.
             </p>
@@ -96,14 +103,14 @@ export default function ContactPage() {
                 { label: "Instagram", value: "@astroshotmedia", href: "https://instagram.com/astroshotmedia" },
               ].map((item) => (
                 <div key={item.label}>
-                  <p className="text-xs font-bold uppercase tracking-widest text-[#999999] mb-1">
+                  <p className="text-xs font-bold uppercase tracking-widest text-white/40 mb-1">
                     {item.label}
                   </p>
                   <a
                     href={item.href}
                     target={item.href.startsWith("http") ? "_blank" : undefined}
                     rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    className="text-[#111111] font-semibold hover:text-[#01F17C] transition-colors"
+                    className="text-white font-semibold hover:text-[#01F17C] transition-colors"
                   >
                     {item.value}
                   </a>
@@ -111,8 +118,8 @@ export default function ContactPage() {
               ))}
             </div>
 
-            <div className="mt-10 p-6 rounded-2xl bg-[#050505] text-white">
-              <p className="text-xs font-bold uppercase tracking-widest text-[#00a855] mb-2">
+            <div className="mt-10 p-6 rounded-2xl bg-[#0d0d0d] border border-white/10">
+              <p className="text-xs font-bold uppercase tracking-widest text-[#01F17C] mb-2">
                 Office
               </p>
               <p className="text-sm text-white/70 leading-relaxed">
@@ -125,7 +132,7 @@ export default function ContactPage() {
             </div>
           </motion.div>
 
-          {/* Form — shows first on mobile, second on desktop */}
+          {/* Form */}
           <motion.div
             className="order-1 lg:order-2"
             initial={{ opacity: 0, x: 20 }}
@@ -135,13 +142,13 @@ export default function ContactPage() {
             {submitted ? (
               <div className="h-full flex items-center justify-center">
                 <div className="text-center py-16">
-                  <div className="w-16 h-16 rounded-full bg-[#01F17C]/10 flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 rounded-full bg-[#01F17C]/15 border border-[#01F17C]/30 flex items-center justify-center mx-auto mb-4">
                     <span className="text-[#01F17C] text-2xl">✓</span>
                   </div>
-                  <h2 className="text-2xl font-black text-[#111111] mb-2">
+                  <h2 className="text-2xl font-extrabold text-white mb-2">
                     Message Sent!
                   </h2>
-                  <p className="text-[#666666] text-sm">
+                  <p className="text-white/60 text-sm">
                     We&apos;ll be in touch within one business day.
                   </p>
                 </div>
@@ -149,11 +156,11 @@ export default function ContactPage() {
             ) : (
               <form
                 onSubmit={handleSubmit}
-                className="rounded-2xl bg-white border border-[#f0f0f0] p-8 lg:p-10 space-y-6"
+                className="rounded-2xl bg-[#0d0d0d] border border-white/10 p-8 lg:p-10 space-y-6"
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-widest text-[#999999] mb-2">
+                    <label className="block text-xs font-bold uppercase tracking-widest text-white/50 mb-2">
                       Name *
                     </label>
                     <input
@@ -163,11 +170,11 @@ export default function ContactPage() {
                       value={formData.name}
                       onChange={handleChange}
                       placeholder="Your name"
-                      className="w-full px-4 py-3 rounded-xl border border-[#e8e8e8] text-sm text-[#111111] placeholder:text-[#cccccc] focus:outline-none focus:border-[#01F17C] transition-colors"
+                      className={inputClass}
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-widest text-[#999999] mb-2">
+                    <label className="block text-xs font-bold uppercase tracking-widest text-white/50 mb-2">
                       Company
                     </label>
                     <input
@@ -176,14 +183,14 @@ export default function ContactPage() {
                       value={formData.company}
                       onChange={handleChange}
                       placeholder="Your company"
-                      className="w-full px-4 py-3 rounded-xl border border-[#e8e8e8] text-sm text-[#111111] placeholder:text-[#cccccc] focus:outline-none focus:border-[#01F17C] transition-colors"
+                      className={inputClass}
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-widest text-[#999999] mb-2">
+                    <label className="block text-xs font-bold uppercase tracking-widest text-white/50 mb-2">
                       Email
                     </label>
                     <input
@@ -192,11 +199,11 @@ export default function ContactPage() {
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="your@email.com"
-                      className="w-full px-4 py-3 rounded-xl border border-[#e8e8e8] text-sm text-[#111111] placeholder:text-[#cccccc] focus:outline-none focus:border-[#01F17C] transition-colors"
+                      className={inputClass}
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-widest text-[#999999] mb-2">
+                    <label className="block text-xs font-bold uppercase tracking-widest text-white/50 mb-2">
                       Phone
                     </label>
                     <input
@@ -205,13 +212,13 @@ export default function ContactPage() {
                       value={formData.phone}
                       onChange={handleChange}
                       placeholder="+965 XXXX XXXX"
-                      className="w-full px-4 py-3 rounded-xl border border-[#e8e8e8] text-sm text-[#111111] placeholder:text-[#cccccc] focus:outline-none focus:border-[#01F17C] transition-colors"
+                      className={inputClass}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-widest text-[#999999] mb-2">
+                  <label className="block text-xs font-bold uppercase tracking-widest text-white/50 mb-2">
                     Service *
                   </label>
                   <select
@@ -219,35 +226,37 @@ export default function ContactPage() {
                     required
                     value={formData.service}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-xl border border-[#e8e8e8] text-sm text-[#111111] focus:outline-none focus:border-[#01F17C] transition-colors bg-white appearance-none"
+                    className={`${inputClass} appearance-none`}
                   >
-                    <option value="">Select a service</option>
+                    <option value="" className="bg-[#0d0d0d]">Select a service</option>
                     {services.map((s) => (
-                      <option key={s} value={s}>{s}</option>
+                      <option key={s} value={s} className="bg-[#0d0d0d]">
+                        {s}
+                      </option>
                     ))}
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-widest text-[#999999] mb-2">
+                  <label className="block text-xs font-bold uppercase tracking-widest text-white/50 mb-2">
                     Budget (USD)
                   </label>
                   <select
                     name="budget"
                     value={formData.budget}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-xl border border-[#e8e8e8] text-sm text-[#111111] focus:outline-none focus:border-[#01F17C] transition-colors bg-white appearance-none"
+                    className={`${inputClass} appearance-none`}
                   >
-                    <option value="">Select your budget</option>
-                    <option value="under_5k">Under $5,000</option>
-                    <option value="5k_10k">$5,000 – $10,000</option>
-                    <option value="10k_20k">$10,000 – $20,000</option>
-                    <option value="above_20k">Above $20,000</option>
+                    <option value="" className="bg-[#0d0d0d]">Select your budget</option>
+                    <option value="under_5k" className="bg-[#0d0d0d]">Under $5,000</option>
+                    <option value="5k_10k" className="bg-[#0d0d0d]">$5,000 – $10,000</option>
+                    <option value="10k_20k" className="bg-[#0d0d0d]">$10,000 – $20,000</option>
+                    <option value="above_20k" className="bg-[#0d0d0d]">Above $20,000</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-widest text-[#999999] mb-2">
+                  <label className="block text-xs font-bold uppercase tracking-widest text-white/50 mb-2">
                     Message *
                   </label>
                   <textarea
@@ -257,11 +266,11 @@ export default function ContactPage() {
                     onChange={handleChange}
                     rows={5}
                     placeholder="Tell us about your project..."
-                    className="w-full px-4 py-3 rounded-xl border border-[#e8e8e8] text-sm text-[#111111] placeholder:text-[#cccccc] focus:outline-none focus:border-[#01F17C] transition-colors resize-none"
+                    className={`${inputClass} resize-none`}
                   />
                 </div>
 
-                {error && <p className="text-red-500 text-sm">{error}</p>}
+                {error && <p className="text-red-400 text-sm">{error}</p>}
 
                 <button
                   type="submit"
@@ -271,9 +280,12 @@ export default function ContactPage() {
                   {submitting ? "Sending..." : "Send Message →"}
                 </button>
 
-                <p className="text-xs text-[#999999] text-center">
+                <p className="text-xs text-white/40 text-center">
                   Or email us directly at{" "}
-                  <a href="mailto:info@astroshotpm.com" className="text-[#01F17C] hover:underline">
+                  <a
+                    href="mailto:info@astroshotpm.com"
+                    className="text-[#01F17C] hover:underline"
+                  >
                     info@astroshotpm.com
                   </a>
                 </p>

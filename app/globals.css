@@ -10,8 +10,20 @@
 }
 
 :root {
-  --background: #FAFAFA;
-  --foreground: #111111;
+  --background: #050505;
+  --foreground: #FAFAFA;
+  --surface-1: #0d0d0d;
+  --surface-2: #141414;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-muted: rgba(255, 255, 255, 0.14);
+  --text-muted: #a1a1a1;
+  --text-dim: #6b6b6b;
+}
+
+/* Force dark: this is a cinematic VFX site, never light */
+html, body {
+  background: #050505;
+  color: #FAFAFA;
 }
 
 * {

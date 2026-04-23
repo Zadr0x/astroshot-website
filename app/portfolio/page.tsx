@@ -33,8 +33,8 @@ export default function PortfolioPage() {
     active === "All" ? projects : projects.filter((p) => p.category === active);
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] pt-24">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+    <div className="min-h-screen bg-[#050505] pt-24">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-20">
         {/* Header */}
         <motion.div
           className="mb-12"
@@ -42,13 +42,13 @@ export default function PortfolioPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <span className="text-xs font-700 uppercase tracking-[0.25em] text-[#00a855]">
+          <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#01F17C]">
             Portfolio
           </span>
-          <h1 className="mt-3 text-5xl lg:text-6xl font-800 text-[#111111] tracking-tight">
+          <h1 className="mt-3 text-5xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.05]">
             Our Work
           </h1>
-          <p className="mt-4 text-[#666666] text-base max-w-md">
+          <p className="mt-4 text-white/60 text-base max-w-md">
             500M+ organic views generated for brands across Kuwait and the GCC.
           </p>
         </motion.div>
@@ -59,10 +59,10 @@ export default function PortfolioPage() {
             <button
               key={cat}
               onClick={() => setActive(cat)}
-              className={`px-4 py-2 text-sm font-600 rounded-full transition-all duration-200 ${
+              className={`px-4 py-2 text-sm font-semibold rounded-full transition-all duration-200 border ${
                 active === cat
-                  ? "bg-[#01F17C] text-[#050505]"
-                  : "bg-[#f0f0f0] text-[#666666] hover:bg-[#e8e8e8]"
+                  ? "bg-[#01F17C] text-[#050505] border-[#01F17C]"
+                  : "bg-white/5 text-white/70 border-white/10 hover:border-white/25 hover:text-white"
               }`}
             >
               {cat}
@@ -76,19 +76,19 @@ export default function PortfolioPage() {
             {Array.from({ length: 8 }).map((_, i) => (
               <div
                 key={i}
-                className="rounded-2xl bg-[#f0f0f0] aspect-[4/5] animate-pulse"
+                className="rounded-2xl bg-[#111] aspect-[4/5] animate-pulse"
               />
             ))}
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-24">
-            <div className="w-16 h-16 rounded-full bg-[#f0f0f0] flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl">✦</span>
+            <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl text-[#01F17C]">✦</span>
             </div>
-            <h3 className="text-lg font-700 text-[#111111] mb-2">
+            <h3 className="text-lg font-bold text-white mb-2">
               {active === "All" ? "Projects coming soon" : `No ${active} projects yet`}
             </h3>
-            <p className="text-[#666666] text-sm">
+            <p className="text-white/50 text-sm">
               We&apos;re uploading our portfolio — check back soon.
             </p>
           </div>

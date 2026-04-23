@@ -85,7 +85,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-[#FAFAFA] text-[#111111]">
+      <body className="min-h-full flex flex-col bg-[#050505] text-[#FAFAFA]">
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />

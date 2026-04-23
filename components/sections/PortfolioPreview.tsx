@@ -38,7 +38,7 @@ export default function PortfolioPreview() {
   const placeholderCount = Math.max(0, 6 - projects.length);
 
   return (
-    <section className="py-16 lg:py-20 bg-[#FAFAFA]">
+    <section className="py-24 lg:py-32 bg-[#050505]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12"
@@ -48,16 +48,16 @@ export default function PortfolioPreview() {
           transition={{ duration: 0.6 }}
         >
           <div>
-            <span className="text-xs font-700 uppercase tracking-[0.25em] text-[#00a855]">
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#01F17C]">
               Portfolio
             </span>
-            <h2 className="mt-3 text-4xl lg:text-5xl font-800 text-[#111111] tracking-tight">
+            <h2 className="mt-3 text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
               Our Work
             </h2>
           </div>
           <Link
             href="/portfolio"
-            className="self-start sm:self-auto px-6 py-3 text-sm font-700 rounded-xl border-2 border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white transition-all duration-300"
+            className="self-start sm:self-auto px-6 py-3 text-sm font-bold rounded-xl border border-white/20 text-white hover:border-[#01F17C] hover:text-[#01F17C] transition-all duration-300"
           >
             View All Projects →
           </Link>
