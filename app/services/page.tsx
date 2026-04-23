@@ -31,7 +31,6 @@ const services = [
       "Compositing & Color Grading",
       "Broadcast & Social Formats",
     ],
-    clients: "Mercedes · BMW · Honda · Ford · Hongqi",
   },
   {
     id: "social",
@@ -47,7 +46,6 @@ const services = [
       "Paid Social Campaigns",
       "Analytics & Monthly Reports",
     ],
-    clients: "Gulf Bank · NBK · Virgin Mobile · Zain",
   },
   {
     id: "branding",
@@ -63,7 +61,6 @@ const services = [
       "Brand Strategy",
       "Pitch Decks & Collateral",
     ],
-    clients: "IKEA · Costa Coffee · Caribou · Trolley",
   },
   {
     id: "3d",
@@ -79,7 +76,6 @@ const services = [
       "3D Explainer Videos",
       "Interactive 3D Assets",
     ],
-    clients: "BYD · National Geographic · Hongqi",
   },
 ];
 
@@ -125,9 +121,7 @@ export default function ServicesPage() {
                 <p className="mt-4 text-[#666666] leading-relaxed">
                   {service.description}
                 </p>
-                <p className="mt-4 text-xs text-[#999999] uppercase tracking-widest">
-                  Clients: {service.clients}
-                </p>
+
               </div>
               <div>
                 <h3 className="text-xs font-700 uppercase tracking-widest text-[#999999] mb-4">
