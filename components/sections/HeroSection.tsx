@@ -10,16 +10,20 @@ export default function HeroSection() {
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const subRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
-  const [videoSrc, setVideoSrc] = useState("/hero-reel.mp4");
+  const [desktopVideoSrc, setDesktopVideoSrc] = useState("/hero-reel.mp4");
+  const [mobileVideoSrc, setMobileVideoSrc] = useState("/hero-reel-mobile.mp4");
 
   useEffect(() => {
     supabase
       .from("site_content")
-      .select("value")
-      .eq("key", "hero_video_url")
-      .single()
+      .select("key, value")
+      .in("key", ["hero_video_url", "hero_video_mobile_url"])
       .then(({ data }) => {
-        if (data?.value) setVideoSrc(data.value);
+        if (!data) return;
+        data.forEach((item) => {
+          if (item.key === "hero_video_url" && item.value) setDesktopVideoSrc(item.value);
+          if (item.key === "hero_video_mobile_url" && item.value) setMobileVideoSrc(item.value);
+        });
       });
   }, []);
 
@@ -30,7 +34,6 @@ export default function HeroSection() {
         .from(subRef.current, { opacity: 0, y: 20, duration: 0.7 }, "-=0.4")
         .from(ctaRef.current, { opacity: 0, y: 20, duration: 0.6 }, "-=0.4");
     }, containerRef);
-
     return () => ctx.revert();
   }, []);
 
@@ -38,15 +41,23 @@ export default function HeroSection() {
     <section
       ref={containerRef}
       className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-[#050505]"
-      style={{
-        background: "linear-gradient(160deg, #050505 0%, #111111 100%)",
-      }}
     >
-      {/* Video background */}
+      {/* Desktop video (landscape) — hidden on mobile */}
       <video
-        key={videoSrc}
-        className="absolute inset-0 w-full h-full object-cover opacity-30"
-        src={videoSrc}
+        key={`desktop-${desktopVideoSrc}`}
+        className="hidden sm:block absolute inset-0 w-full h-full object-cover opacity-30"
+        src={desktopVideoSrc}
+        autoPlay
+        muted
+        loop
+        playsInline
+      />
+
+      {/* Mobile video (portrait/vertical) — hidden on desktop */}
+      <video
+        key={`mobile-${mobileVideoSrc}`}
+        className="block sm:hidden absolute inset-0 w-full h-full object-cover opacity-30"
+        src={mobileVideoSrc}
         autoPlay
         muted
         loop

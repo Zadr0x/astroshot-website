@@ -1,5 +1,6 @@
 import HeroSection from "@/components/sections/HeroSection";
 import Marquee from "@/components/Marquee";
+import FeaturedVideos from "@/components/sections/FeaturedVideos";
 import ServicesSection from "@/components/sections/ServicesSection";
 import PortfolioPreview from "@/components/sections/PortfolioPreview";
 import StatsSection from "@/components/sections/StatsSection";
@@ -12,6 +13,7 @@ export default function HomePage() {
     <>
       <HeroSection />
       <Marquee />
+      <FeaturedVideos />
       <ServicesSection />
       <PortfolioPreview />
       <StatsSection />
