@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-
 import ServiceEditor from '@/components/admin/ServiceEditor';
 
 export default function ServicesCmsPage() {
@@ -11,10 +10,11 @@ export default function ServicesCmsPage() {
 
   useEffect(() => {
     async function fetchServices() {
-      const { data, error } = await supabase.from('services').select('*').order('id');
-      if (data) {
-        setServices(data);
-      }
+      const { data, error } = await supabase
+        .from('services')
+        .select('*')
+        .order('sort_order', { ascending: true });
+      if (data) setServices(data);
       setLoading(false);
     }
     fetchServices();
@@ -27,20 +27,20 @@ export default function ServicesCmsPage() {
       .eq('id', serviceId)
       .select();
 
-    if (error) {
-      console.error('Error updating service:', error);
-    } else if (data) {
+    if (!error && data) {
       setServices(services.map(s => s.id === serviceId ? data[0] : s));
+      alert('Saved successfully!');
+    } else {
+      alert('Error saving. Please try again.');
     }
   };
 
-  if (loading) {
-    return <div className="p-8 text-white">Loading services...</div>
-  }
+  if (loading) return <div className="p-8 text-white">Loading services...</div>;
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6 text-white">Manage Services</h1>
+      <h1 className="text-3xl font-bold mb-2 text-white">Manage Services</h1>
+      <p className="text-gray-400 mb-8">Edit the services shown on your website. Click "Save Changes" after each edit.</p>
       <div className="space-y-8">
         {services.map((service) => (
           <ServiceEditor key={service.id} service={service} onSave={handleSave} />
