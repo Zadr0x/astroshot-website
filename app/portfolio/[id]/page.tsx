@@ -198,13 +198,10 @@ export default function ProjectDetailPage() {
                 ))}
               </div>
             ) : (
-              // Only show WIP if there is no main video either (truly empty project)
-              !isVideo && (
-                <div className="rounded-2xl border border-white/10 bg-[#111] p-12 text-center">
-                  <p className="text-[#444] text-sm font-semibold uppercase tracking-widest">Work in Progress</p>
-                  <p className="text-[#333] text-xs mt-2">Gallery coming soon</p>
-                </div>
-              )
+              <div className="rounded-2xl border border-white/10 bg-[#111] p-12 text-center">
+                <p className="text-[#444] text-sm font-semibold uppercase tracking-widest">Work in Progress</p>
+                <p className="text-[#333] text-xs mt-2">Gallery coming soon</p>
+              </div>
             )}
           </div>
 

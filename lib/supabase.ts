@@ -3,7 +3,7 @@ import { createClient, SupabaseClient } from "@supabase/supabase-js";
 export type Project = {
   id: string;
   title: string;
-  category: "VFX" | "Social Media" | "Branding" | "3D Animation";
+  category: "Mixed Reality" | "Full CGI" | "Cinema AI" | "Social Media Content" | "Motion Graphics" | "Branding" | "VFX" | "Social Media" | "3D Animation";
   description: string | null;
   thumbnail_url: string | null;
   media_url: string | null;

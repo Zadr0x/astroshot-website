@@ -178,10 +178,12 @@ export default function ProjectForm({ initialData, initialImages = [], projectId
             <div>
               <label className={labelCls}>Category *</label>
               <select value={form.category} onChange={(e) => set("category", e.target.value as Project["category"])} className={inputCls}>
-                <option>VFX</option>
-                <option>Social Media</option>
+                <option>Mixed Reality</option>
+                <option>Full CGI</option>
+                <option>Cinema AI</option>
+                <option>Social Media Content</option>
+                <option>Motion Graphics</option>
                 <option>Branding</option>
-                <option>3D Animation</option>
               </select>
             </div>
             <div>

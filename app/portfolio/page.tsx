@@ -8,7 +8,7 @@ import type { Project } from "@/lib/supabase";
 import ProjectCard from "@/components/ProjectCard";
 import { motion } from "framer-motion";
 
-const categories = ["All", "VFX", "Social Media", "Branding", "3D Animation"] as const;
+const categories = ["All", "Mixed Reality", "Full CGI", "Cinema AI", "Social Media Content", "Motion Graphics", "Branding"] as const;
 type Category = (typeof categories)[number];
 
 export default function PortfolioPage() {
