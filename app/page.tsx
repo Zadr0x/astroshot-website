@@ -18,7 +18,7 @@ export default function HomePage() {
       <PortfolioPreview />
       <StatsSection />
       <AboutTeaser />
-      <InstagramSection />
+
       <CTABanner />
     </>
   );
