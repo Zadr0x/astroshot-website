@@ -22,11 +22,11 @@ export const services = [
   },
   {
     icon: "✦",
-    title: "Cinema AI",
+    title: "Cinematic AI Content",
     description:
-      "Cinema AI commercials that use AI filmmaking to create realistic, story-driven ads with cinematic scenes, dialogue, and visual storytelling. Astroshot creates AI-generated commercial videos for brands that want modern, high-impact campaigns.",
-    tags: ["AI Filmmaking", "Commercials", "Storytelling"],
-    slug: "cinema-ai",
+      "Cinematic AI content that uses AI filmmaking to create realistic, story-driven ads with cinematic scenes, dialogue, and visual storytelling. Astroshot creates AI-powered commercial content for brands that want modern, high-impact campaigns.",
+    tags: ["AI Filmmaking", "Commercial Content", "Storytelling"],
+    slug: "cinematic-ai-content",
   },
   {
     icon: "◉",
