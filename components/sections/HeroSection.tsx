@@ -132,8 +132,8 @@ export default function HeroSection() {
           </span>
         </h1>
 
-        <p ref={subRef} className="mt-6 text-base sm:text-lg text-white/60 font-400 tracking-wide max-w-xl mx-auto">
-          VFX · CGI · Social Media · Branding — Kuwait &amp; GCC
+        <p ref={subRef} className="mt-6 text-base sm:text-lg text-white/60 font-400 tracking-wide max-w-3xl mx-auto leading-relaxed">
+          Astroshot is a Kuwait-based creative marketing agency specializing in VFX, CGI, social media, branding, and high-impact campaigns for brands across Kuwait and the GCC.
         </p>
 
         <div ref={ctaRef} className="mt-10 flex items-center justify-center gap-4">

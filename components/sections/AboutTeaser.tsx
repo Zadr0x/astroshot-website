@@ -32,22 +32,25 @@ export default function AboutTeaser() {
             transition={{ duration: 0.6, delay: 0.1 }}
           >
             <p className="text-white/70 text-base leading-relaxed mb-6">
-              Founded with one goal — to put Gulf brands on the global map.
-              We&apos;ve spent 8+ years perfecting the craft of visual
-              storytelling, generating over 500 million organic views for our
-              clients across Kuwait, Saudi Arabia, and the wider GCC.
+              Astroshot is a premium creative agency based in Kuwait, known for blending strategy, visual storytelling, VFX, CGI, and content production into campaigns that audiences actually notice.
             </p>
             <p className="text-white/70 text-base leading-relaxed mb-8">
-              From Fortune 500 automotive campaigns to local F&B brands
-              breaking records — we approach every project with the same
-              obsessive attention to quality.
+              From Fortune 500 automotive campaigns to local F&B brands breaking records, we bring the same obsessive attention to strategy, execution, and creative impact across Kuwait, Saudi Arabia, and the wider GCC.
             </p>
-            <Link
-              href="/about"
-              className="inline-flex items-center gap-2 text-sm font-bold text-white hover:text-[#01F17C] transition-colors"
-            >
-              Our Story →
-            </Link>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <Link
+                href="/about"
+                className="inline-flex items-center gap-2 text-sm font-bold text-white hover:text-[#01F17C] transition-colors"
+              >
+                Our Story →
+              </Link>
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 text-sm font-bold text-[#01F17C] hover:text-white transition-colors"
+              >
+                Start a Project →
+              </Link>
+            </div>
           </motion.div>
         </div>
       </div>

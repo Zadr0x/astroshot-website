@@ -25,24 +25,23 @@ export default function CTABanner() {
               impossible to ignore?
             </span>
           </h2>
-          <p className="mt-6 text-[#666666] text-base max-w-md mx-auto">
-            Join 170+ brands across Kuwait and the GCC who trust Astroshot to
-            tell their story.
+          <p className="mt-6 text-[#666666] text-base max-w-2xl mx-auto leading-relaxed">
+            Ready to launch your next campaign with Astroshot? Join 170+ brands across Kuwait and the GCC who trust us for VFX, CGI, social media, branding, and creative campaigns that drive attention.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href="mailto:info@astroshotpm.com"
+              href="/contact"
               className="px-8 py-4 text-sm font-700 rounded-2xl bg-[#01F17C] text-[#050505] hover:bg-[#00d96e] transition-colors"
             >
-              Let&apos;s Talk
+              Start Your Project
             </a>
             <a
-              href="https://instagram.com/astroshotmedia"
+              href="https://api.whatsapp.com/send/?phone=96593336065&text=Hi+Astroshot%2C+I%27d+like+to+discuss+a+project&type=phone_number&app_absent=0"
               target="_blank"
               rel="noopener noreferrer"
               className="px-8 py-4 text-sm font-700 rounded-2xl border border-white/20 text-white hover:border-white/40 transition-colors"
             >
-              @astroshotmedia
+              WhatsApp Us
             </a>
           </div>
         </motion.div>

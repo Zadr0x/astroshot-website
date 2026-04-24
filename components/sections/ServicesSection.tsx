@@ -63,8 +63,8 @@ export default function ServicesSection() {
           <h2 className="mt-3 text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
             Services
           </h2>
-          <p className="mt-4 text-white/60 max-w-md mx-auto text-base">
-            End-to-end creative production for brands that refuse to be ordinary.
+          <p className="mt-4 text-white/60 max-w-3xl mx-auto text-base leading-relaxed">
+            From cinematic VFX and CGI production to social media, branding, and content strategy, Astroshot helps brands create campaigns that capture attention, drive engagement, and stay memorable.
           </p>
         </motion.div>
 
