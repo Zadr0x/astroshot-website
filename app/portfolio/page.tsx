@@ -8,7 +8,7 @@ import type { Project } from "@/lib/supabase";
 import ProjectCard from "@/components/ProjectCard";
 import { motion } from "framer-motion";
 
-const categories = ["All", "Mixed Reality", "Full CGI", "Cinema AI", "Social Media Content", "Motion Graphics", "Branding"] as const;
+const categories = ["All", "Mixed Reality", "Full CGI", "Cinema AI", "Social Media Content", "Motion Graphics"] as const;
 type Category = (typeof categories)[number];
 
 export default function PortfolioPage() {
@@ -43,7 +43,7 @@ export default function PortfolioPage() {
           transition={{ duration: 0.6 }}
         >
           <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#01F17C]">
-            Portfolio
+            Projects
           </span>
           <h1 className="mt-3 text-5xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.05]">
             Our Work

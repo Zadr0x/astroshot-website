@@ -40,7 +40,7 @@ export default function PortfolioPreview() {
         >
           <div>
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#01F17C]">
-              Portfolio
+              Projects
             </span>
             <h2 className="mt-3 text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
               Our Work
