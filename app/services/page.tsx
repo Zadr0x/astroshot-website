@@ -2,78 +2,93 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Services — VFX, CGI, Branding & Social Media Kuwait",
+  title: "VFX, CGI, Social Media & AI Content Services in Kuwait | Astroshot",
   description:
-    "Astroshot offers full-service VFX, CGI production, 3D animation, social media marketing, and branding services in Kuwait and across the GCC.",
+    "Astroshot provides VFX, CGI, social media content, cinematic AI content, and motion graphics services for brands in Kuwait and across the GCC.",
   keywords: [
-    "VFX Kuwait",
-    "CGI videos Kuwait",
-    "3D animation Kuwait",
-    "social media marketing Kuwait",
-    "branding agency Kuwait",
+    "VFX agency Kuwait",
+    "CGI agency Kuwait",
+    "social media agency Kuwait",
+    "AI content agency Kuwait",
+    "motion graphics Kuwait",
     "marketing agency Kuwait",
   ],
 };
 
 const services = [
   {
-    id: "vfx",
+    id: "mixed-reality",
     number: "01",
-    title: "VFX & CGI",
-    headline: "Hyper-Real Campaigns",
+    title: "Mixed Reality",
+    headline: "High-Impact VFX Campaigns",
     description:
-      "We create visual effects and CGI production that stops people mid-scroll. From cinematic automotive campaigns to explosive product launches — our VFX team delivers broadcast-quality results for social and OOH.",
+      "Mixed reality content that combines live-action production with VFX to create high-impact campaigns for launches, products, and social media. Astroshot produces mixed reality ads and visual storytelling for brands across Kuwait and the GCC.",
     deliverables: [
+      "Mixed Reality Campaigns",
       "Visual Effects (VFX) Production",
-      "CGI Product Visualization",
-      "Motion Graphics",
+      "Launch Films & Product Reveals",
       "Compositing & Color Grading",
-      "Broadcast & Social Formats",
+      "Social & Commercial Formats",
     ],
   },
   {
-    id: "social",
+    id: "full-cgi",
     number: "02",
-    title: "Social Media",
-    headline: "Strategy That Drives Real Growth",
+    title: "Full CGI",
+    headline: "Premium 3D Visual Production",
     description:
-      "End-to-end social media management across Instagram, TikTok, X, LinkedIn, and Snapchat. We don't just post — we build communities, run paid campaigns, and measure everything that matters.",
+      "Full CGI production with cinematic 3D visuals for product campaigns, commercial storytelling, and branded content. Astroshot delivers CGI advertising, product visualization, and high-end digital production for brands that want premium visual impact.",
     deliverables: [
-      "Content Strategy & Calendar",
-      "Reels & Short-Form Video",
-      "Community Management",
-      "Paid Social Campaigns",
-      "Analytics & Monthly Reports",
+      "CGI Advertising",
+      "Product Visualization",
+      "3D Commercial Scenes",
+      "Digital Launch Content",
+      "High-End Render Production",
     ],
   },
   {
-    id: "branding",
+    id: "cinematic-ai-content",
     number: "03",
-    title: "Branding",
-    headline: "Identities That Can't Be Forgotten",
+    title: "Cinematic AI Content",
+    headline: "AI-Powered Storytelling",
     description:
-      "We build brand identities from the ground up — or elevate existing ones. Logo design, typography, color systems, brand guidelines, and full visual identity packages that scale across every touchpoint.",
+      "Cinematic AI content built for modern brands that want story-driven ads, AI-powered scenes, and visually striking commercial content. Astroshot uses AI filmmaking and creative direction to produce campaigns that feel current, cinematic, and attention-grabbing.",
     deliverables: [
-      "Logo & Visual Identity",
-      "Brand Guidelines",
-      "Packaging Design",
-      "Brand Strategy",
-      "Pitch Decks & Collateral",
+      "AI Commercial Content",
+      "Story-Driven AI Scenes",
+      "Concept Visualization",
+      "Creative Direction",
+      "Campaign Content Development",
     ],
   },
   {
-    id: "3d",
+    id: "social-media-content",
     number: "04",
-    title: "3D Animation",
-    headline: "Motion That Makes Products the Hero",
+    title: "Social Media Content",
+    headline: "Built for Reach and Relevance",
     description:
-      "Photo-realistic 3D animation and architectural visualization. Our 3D team handles everything from product hero shots to full explainer animations — all rendered in-house for complete quality control.",
+      "Social media content creation for Instagram, TikTok, and digital campaigns, including strategy, filming, editing, creative direction, and monthly content planning. Astroshot helps brands grow with content built for reach, relevance, and engagement.",
     deliverables: [
-      "Product 3D Animation",
-      "Architectural Visualization",
-      "Character Animation",
-      "3D Explainer Videos",
-      "Interactive 3D Assets",
+      "Content Strategy & Planning",
+      "Instagram & TikTok Content",
+      "Filming & Editing",
+      "Creative Direction",
+      "Monthly Content Systems",
+    ],
+  },
+  {
+    id: "motion-graphics",
+    number: "05",
+    title: "Motion Graphics",
+    headline: "Clarity with Visual Impact",
+    description:
+      "Motion graphics and animated content that explain products, services, offers, and digital experiences in a clear and visually engaging way. Astroshot creates motion design, 2D and 3D animation, and commercial content for brands that need clarity with impact.",
+    deliverables: [
+      "Motion Design",
+      "2D & 3D Animation",
+      "Explainer Content",
+      "Commercial Motion Graphics",
+      "Animated Digital Assets",
     ],
   },
 ];
@@ -94,12 +109,11 @@ export default function ServicesPage() {
           <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#01F17C]">
             Services
           </span>
-          <h1 className="mt-3 text-5xl lg:text-7xl font-extrabold text-white tracking-tight max-w-3xl leading-[1.05]">
-            Everything You Need to Win
+          <h1 className="mt-3 text-5xl lg:text-7xl font-extrabold text-white tracking-tight max-w-4xl leading-[1.05]">
+            VFX, CGI, Social Media & AI Content Services in Kuwait
           </h1>
-          <p className="mt-5 text-white/60 text-base max-w-lg">
-            Four core disciplines. One studio. Fully integrated, obsessively
-            executed.
+          <p className="mt-5 text-white/60 text-base max-w-3xl leading-relaxed">
+            Astroshot provides VFX, CGI, social media content, cinematic AI content, and motion graphics services for brands in Kuwait and across the GCC. From launch campaigns and mixed reality ads to always-on content systems, we create work designed to capture attention and drive results.
           </p>
         </div>
       </div>
@@ -164,16 +178,16 @@ export default function ServicesPage() {
         />
         <div className="relative max-w-3xl mx-auto px-6 text-center">
           <h2 className="text-3xl lg:text-5xl font-extrabold text-white tracking-tight">
-            Not sure which service you need?
+            Not sure which service fits your campaign?
           </h2>
-          <p className="mt-4 text-white/60">
-            We&apos;ll figure it out together.
+          <p className="mt-4 text-white/60 max-w-2xl mx-auto leading-relaxed">
+            We&apos;ll help you choose the right creative direction based on your goals, audience, and launch needs.
           </p>
           <Link
             href="/contact"
             className="mt-8 inline-block px-8 py-4 text-sm font-bold rounded-2xl bg-[#01F17C] text-[#050505] hover:bg-[#00d96e] transition-colors"
           >
-            Get a Free Consultation
+            Start Your Project
           </Link>
         </div>
       </div>
