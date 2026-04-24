@@ -14,6 +14,9 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
+  verification: {
+    google: "vnUZBj22MNq3TqcMmch9pFtrWgFTnmYmtwOHZgec0H8",
+  },
   title: {
     default: "Astroshot | Kuwait's #1 VFX & Creative Agency",
     template: "%s | Astroshot",
