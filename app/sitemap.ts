@@ -113,6 +113,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${baseUrl}/automotive-marketing-kuwait`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/ramadan-campaign-kuwait`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/instagram-management-kuwait`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
       url: `${baseUrl}/blog`,
       lastModified: new Date(),
       changeFrequency: "weekly",
