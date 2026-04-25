@@ -174,12 +174,12 @@ export default function ProjectDetailPage() {
             </div>
           )}
 
-          {/* Gallery */}
-          <div>
-            <h2 className="text-xs font-bold uppercase tracking-widest text-[#01F17C] mb-6">
-              {images.length > 0 ? "Gallery" : ""}
-            </h2>
-            {images.length > 0 ? (
+          {/* Gallery — only render when images exist */}
+          {images.length > 0 && (
+            <div>
+              <h2 className="text-xs font-bold uppercase tracking-widest text-[#01F17C] mb-6">
+                Gallery
+              </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {images.map((img) => (
                   <motion.div
@@ -197,13 +197,8 @@ export default function ProjectDetailPage() {
                   </motion.div>
                 ))}
               </div>
-            ) : (
-              <div className="rounded-2xl border border-white/10 bg-[#111] p-12 text-center">
-                <p className="text-[#444] text-sm font-semibold uppercase tracking-widest">Work in Progress</p>
-                <p className="text-[#333] text-xs mt-2">Gallery coming soon</p>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* CTA */}
           <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6">
