@@ -24,6 +24,9 @@ export const metadata: Metadata = {
   },
   verification: {
     google: "vnUZBj22MNq3TqcMmch9pFtrWgFTnmYmtwOHZgec0H8",
+    other: {
+      "facebook-domain-verification": "g4ui4cmad4ytd8hu8zwtzpor3jhhwn",
+    },
   },
   title: {
     default: "Astroshot | Kuwait's #1 VFX & Creative Agency",
