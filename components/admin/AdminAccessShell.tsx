@@ -125,7 +125,7 @@ export default function AdminAccessShell({ children }: { children: React.ReactNo
       className="admin-shell min-h-screen bg-[#050505]"
       style={{ fontFamily: "ui-sans-serif, -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif" }}
     >
-      <AdminSidebar account={account} collapsed={sidebarCollapsed} onToggleCollapsed={toggleSidebar} />
+      <AdminSidebar />
       <div className={`${sidebarCollapsed ? "lg:ml-16" : "lg:ml-60"} ${immersiveMobile ? "pt-0" : "pt-14 lg:pt-0"} min-h-screen transition-[margin] duration-200`}>
         {children}
       </div>

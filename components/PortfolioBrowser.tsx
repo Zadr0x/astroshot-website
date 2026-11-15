@@ -110,7 +110,6 @@ export default function PortfolioBrowser({
             <ProjectCard
               key={project.id}
               project={project}
-              proof={projectProofs[project.id]}
             />
           ))}
         </motion.div>
