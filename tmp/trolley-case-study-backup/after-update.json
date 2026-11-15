@@ -1,0 +1,64 @@
+{
+  "project": {
+    "id": "b3f8021d-c2ce-4d58-938f-edbbad4958ce",
+    "title": "Trolley - App & Rewards Program Launch",
+    "category": "Mixed Reality",
+    "description": "When Trolley prepared to launch its mobile app and new rewards program in Kuwait, the campaign needed to do more than announce a feature. Customers had to notice the launch, understand the reward mechanic, and connect shopping at Trolley with value inside the app.\n\nAstroshot built a 360 creative campaign around that journey, combining mixed reality, full CGI, motion graphics, social-first storytelling, and outdoor campaign creative.\n\nPhase 1: Creating the viral launch\nThe campaign began with a mixed reality CGI launch film designed for organic attention. The film generated 3M+ organic views, creating the awareness layer before the campaign expanded into education and nationwide visibility.\n\nPhase 2: Turning shopping into coins\nTo make the rewards idea instantly understandable, Astroshot produced fully CGI animated films showing purchases transforming into Trolley Coins. The films translated the app's reward mechanism into a simple visual language for social media and digital screens.\n\nPhase 3: Explaining how it works\nAwareness was only the first step. Astroshot created app explainer content showing the customer flow: shop with Trolley, collect coins, and use coins through the Trolley app.\n\nPhase 4: Taking the campaign offline\nThe campaign concept was extended into static creative assets for Trolley's wider advertising network, including billboards, buses, outdoor placements, digital screens, and social media.\n\nOne launch. Multiple touchpoints.\nRather than relying on one launch video, Astroshot built an integrated campaign around attention, understanding, and adoption, introducing Trolley's app and rewards ecosystem across Kuwait.",
+    "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1776923719303-yjmul27vx5l.png",
+    "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1776893639553-kv9d5ivintr.mp4",
+    "media_type": "video",
+    "featured": true,
+    "status": "published",
+    "sort_order": 0,
+    "created_at": "2026-04-22T21:34:12.179679+00:00",
+    "updated_at": "2026-08-27T16:10:20.951928+00:00"
+  },
+  "images": [
+    {
+      "id": "35c492a5-df3d-4793-8ce1-ca4cdeb4315e",
+      "project_id": "b3f8021d-c2ce-4d58-938f-edbbad4958ce",
+      "image_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/project-images/1776923741200-7c06s5pzhtf.png",
+      "caption": null,
+      "sort_order": 0,
+      "created_at": "2026-04-23T05:55:46.520128+00:00"
+    },
+    {
+      "id": "8ccb2f3c-6fa1-44fc-88a2-5c4989fe9bc5",
+      "project_id": "b3f8021d-c2ce-4d58-938f-edbbad4958ce",
+      "image_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/project-images/case-studies/trolley-app-rewards/trolley-app-registration-cgi-explainer-2026-08-27.mp4",
+      "caption": "App registration CGI explainer",
+      "sort_order": 1,
+      "created_at": "2026-08-27T16:10:19.714979+00:00"
+    },
+    {
+      "id": "3faba671-f169-400b-be83-104b89cc2de8",
+      "project_id": "b3f8021d-c2ce-4d58-938f-edbbad4958ce",
+      "image_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/project-images/case-studies/trolley-app-rewards/trolley-coins-full-cgi-film-2026-08-27.mp4",
+      "caption": "Trolley Coins full CGI film",
+      "sort_order": 2,
+      "created_at": "2026-08-27T16:10:20.002092+00:00"
+    },
+    {
+      "id": "0128e6f8-9cfa-44e6-8dd5-071548df3c83",
+      "project_id": "b3f8021d-c2ce-4d58-938f-edbbad4958ce",
+      "image_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/project-images/case-studies/trolley-app-rewards/trolley-motion-graphics-app-explainer-2026-08-27.mp4",
+      "caption": "Motion graphics app explainer",
+      "sort_order": 3,
+      "created_at": "2026-08-27T16:10:20.706432+00:00"
+    }
+  ],
+  "uploaded": [
+    {
+      "caption": "App registration CGI explainer",
+      "url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/project-images/case-studies/trolley-app-rewards/trolley-app-registration-cgi-explainer-2026-08-27.mp4"
+    },
+    {
+      "caption": "Trolley Coins full CGI film",
+      "url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/project-images/case-studies/trolley-app-rewards/trolley-coins-full-cgi-film-2026-08-27.mp4"
+    },
+    {
+      "caption": "Motion graphics app explainer",
+      "url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/project-images/case-studies/trolley-app-rewards/trolley-motion-graphics-app-explainer-2026-08-27.mp4"
+    }
+  ]
+}

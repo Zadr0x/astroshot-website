@@ -1,0 +1,68 @@
+{
+  "viewport": 1920,
+  "trackWidth": 7560,
+  "groupWidth": 2520,
+  "imageCount": 10,
+  "imgs": [
+    {
+      "alt": "Caribou",
+      "src": "https://pub-cedabf5231a848dfb49375ca69e25d88.r2.dev/client-logos/1777066050428-o4vigffmgz.png",
+      "w": 48,
+      "h": 48
+    },
+    {
+      "alt": "Chevrolet",
+      "src": "https://pub-cedabf5231a848dfb49375ca69e25d88.r2.dev/client-logos/1776894227141-kpaitl49skh.png",
+      "w": 48,
+      "h": 48
+    },
+    {
+      "alt": "National Geographic",
+      "src": "https://pub-cedabf5231a848dfb49375ca69e25d88.r2.dev/client-logos/1777121959583-u3ytf1rstxe.png",
+      "w": 130.609375,
+      "h": 48
+    },
+    {
+      "alt": "Costa",
+      "src": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/client-logos/1777900895207-q5w6izl7g3a.png",
+      "w": 78.71875,
+      "h": 48
+    },
+    {
+      "alt": "Honda",
+      "src": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/client-logos/1777901207247-xqag16xvezp.png",
+      "w": 144,
+      "h": 48
+    },
+    {
+      "alt": "Mercedes",
+      "src": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/client-logos/1777901658490-0v72k885m5.png",
+      "w": 77.1875,
+      "h": 48
+    },
+    {
+      "alt": "Hongqi",
+      "src": "https://pub-cedabf5231a848dfb49375ca69e25d88.r2.dev/client-logos/1777121989149-7qf6v8mb6kv.png",
+      "w": 65.390625,
+      "h": 48
+    },
+    {
+      "alt": "Huawei",
+      "src": "https://pub-cedabf5231a848dfb49375ca69e25d88.r2.dev/client-logos/1777122006492-osnnf4aq9em.png",
+      "w": 76.9375,
+      "h": 48
+    },
+    {
+      "alt": "BMW",
+      "src": "https://pub-cedabf5231a848dfb49375ca69e25d88.r2.dev/client-logos/1777122110333-lw0sl2mm9ys.png",
+      "w": 58.453125,
+      "h": 48
+    },
+    {
+      "alt": "BYD",
+      "src": "https://pub-cedabf5231a848dfb49375ca69e25d88.r2.dev/client-logos/1777122092048-aubhgo486fl.png",
+      "w": 60.28125,
+      "h": 48
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "project": {
+    "id": "92e3ae4c-dcd8-40c9-8064-41e4364fcf94",
+    "title": "Jahez - Sky High Delivery",
+    "category": "Mixed Reality",
+    "description": "Jahez takes free delivery to new heights with a massive balloon floating above the city’s tallest landmarks.\nThe 180-day free delivery message captures attention from a fresh angle, amplifying visibility and excitement for the Jahez app.\nAn eye-catching aerial display that brings Jahez’s offer to life in a way only the skies can.",
+    "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1777285417406-lyre92ehe7.png",
+    "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1777285463968-2dki9hpulzl.mp4",
+    "media_type": "video",
+    "featured": false,
+    "status": "published",
+    "sort_order": 0,
+    "created_at": "2026-04-27T10:25:25.90947+00:00",
+    "updated_at": "2026-06-01T10:32:34.537927+00:00"
+  },
+  "images": []
+}

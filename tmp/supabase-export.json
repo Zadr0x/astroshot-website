@@ -1,0 +1,360 @@
+{
+  "projects": [
+    {
+      "id": "b3f8021d-c2ce-4d58-938f-edbbad4958ce",
+      "title": "Trolley - Reward Program Campaign",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1776923719303-yjmul27vx5l.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1776893639553-kv9d5ivintr.mp4"
+    },
+    {
+      "id": "17c5e8a2-48f0-4119-b10a-d5c9986e5f34",
+      "title": "HongQi - HS9 VFX Campaign",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1776928118137-uarlt4cbvec.jpg",
+      "media_url": null
+    },
+    {
+      "id": "af54cb11-578b-42e0-8ee6-6e506df391f4",
+      "title": "Warba Bank - Waves Wednesday Campaign",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1776930826921-fmeq19n3ksr.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1776931161942-8816nd209pv.mp4"
+    },
+    {
+      "id": "1abb3fd6-52ae-4406-8d5f-ccfb8aa01c0a",
+      "title": "Mercedes - CLA Launch Kuwait",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1776941893744-176aumifhpa.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1776941899728-7245s384ys.mp4"
+    },
+    {
+      "id": "4a168571-1826-47cc-9864-f6c56bd02b30",
+      "title": "MG - Whale Launch",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1776941721533-so0elbji1ae.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1776941737202-72f3t12ocsp.mp4"
+    },
+    {
+      "id": "6c04b9a6-b99e-40e0-8d2b-2ddabcd82314",
+      "title": "National Bank of Kuwait - Al-Jawhara Campaign",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1776941111145-xndkkjjfzio.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/nbk-jawhara-campaign-1776934031.mp4"
+    },
+    {
+      "id": "f98981e1-d280-4baf-a82c-85610ccb59cd",
+      "title": "Trolley - Rewards Program Full CGI",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1776930281558-z9lvy0gy3l9.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1776930417171-ivzbfo4qtz8.mp4"
+    },
+    {
+      "id": "f1726a70-87c7-4243-9073-ceb4379c4cb7",
+      "title": "SEC Construction - Social Media Management",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1776928946749-yjfvpc4tyq.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1776928955427-8lhi9wvuurh.mp4"
+    },
+    {
+      "id": "450f68cd-a269-4407-aee3-6590d5535398",
+      "title": "Spark Chevrolet - Cheat Code Activated",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1776928628076-ho76ar95xiv.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1776928695710-pi4t27rlg2e.mp4"
+    },
+    {
+      "id": "64bb5a64-5ca2-4601-8da7-b322a91d1b4a",
+      "title": "Mercedes - Kuwait National Day",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1776942263151-8gvzfz52nn.png",
+      "media_url": null
+    },
+    {
+      "id": "25e3cfe1-2e26-4450-bf69-8a9c926dc246",
+      "title": "Ibrahim Qurashi - A Touch of Scent",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1777197803750-l361cggusks.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1777197826266-q9dndhr7o1d.mp4"
+    },
+    {
+      "id": "8ff16086-46f7-4610-9975-2997b1fa475d",
+      "title": "Mercedes - G-Class Pre-Launch (Kuwait)",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1776942049895-fm7wjyvohhu.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1776942059322-yensqnpnzl9.mp4"
+    },
+    {
+      "id": "c1f86b49-3170-47e7-9e83-0c910431cc74",
+      "title": "Match - Lifted by Design",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1777197466604-0pynzeb5zrx.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1777197491185-ypqecuxjwvm.mp4"
+    },
+    {
+      "id": "bb51bf9f-060a-4b95-a713-f059a205431b",
+      "title": "National Geographic  -  The Winter Pass",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1777117466095-iqudpp2ox4i.jpg",
+      "media_url": null
+    },
+    {
+      "id": "e7bd1fe6-5b57-473c-aaba-a596ab1d9275",
+      "title": "KIB - Digital Activation",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1777121274640-yx0mq8h9rl.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1777121330182-ai9k9oba6n.mp4"
+    },
+    {
+      "id": "75b5f863-7ba3-451c-9143-1866ac8ef07e",
+      "title": "Gulf Bank - Marathon",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1777120273977-qo71yn7o4pi.png",
+      "media_url": null
+    },
+    {
+      "id": "cd1054ac-85f2-47df-bcbb-ff3207bb374b",
+      "title": "Warehouse - Mall Meets Mirage",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1777196253497-hvq5phmqum7.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1777196307379-9g67jhpj6i9.mp4"
+    },
+    {
+      "id": "a99a19b4-abc2-4076-936d-42cc1a7444c6",
+      "title": "Just Burger - Biggest Burger in Kuwait",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1777198264422-g13u0z5nuff.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1777198287617-hdgxiik59hp.mp4"
+    },
+    {
+      "id": "e6608da2-57f2-4007-ae60-a7615f20cca8",
+      "title": "Flex - Energy Overload",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1777120519823-xxcyh2m3oa.jpg",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1777287653572-axwvio7ashe.mp4"
+    },
+    {
+      "id": "7a74950b-cae1-4af6-a8d8-89943d9bc781",
+      "title": "Nuts & More - The Nut Takeover",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1777198821486-0mgfkesg0n2b.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1777198849209-6yu8pwdaay.mp4"
+    },
+    {
+      "id": "77bbe789-ef2e-4c4c-825b-ca899bfbddf2",
+      "title": "Brandaat - Tomorrow, Installed",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1777200809994-7642n6j2vkf.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1777200838449-5tflywt51ki.mp4"
+    },
+    {
+      "id": "65b0faa5-9bd6-4da8-872d-23fd10b61b27",
+      "title": "UR Cookies - Sweet Drop",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1777201072535-zyzurig86g.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1777201099904-7fff1cucjy8.mp4"
+    },
+    {
+      "id": "92e3ae4c-dcd8-40c9-8064-41e4364fcf94",
+      "title": "Jahez - Sky High Delivery",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1777285417406-lyre92ehe7.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1777285463968-2dki9hpulzl.mp4"
+    },
+    {
+      "id": "156e3842-7dd4-449a-b9cd-8bda4aa22fbe",
+      "title": "Ford - Choose Your Ford",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1777284591167-2k7syt7xn8t.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1777284609566-hacxcr049rm.mp4"
+    },
+    {
+      "id": "4717d834-868a-4431-b2f1-5c9f2b2df353",
+      "title": "Homes - Elevated ",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1777202839807-pyy1v0gq4kg.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1777201404152-zyof1mk6u7o.mp4"
+    },
+    {
+      "id": "dd94158e-b0f9-471e-927f-453ace80dff4",
+      "title": "BMW - Walking Power",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1777284212535-tzhg7qoerr.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1777284047795-kcpwd0hw6ja.mp4"
+    },
+    {
+      "id": "a175fea1-f0b9-49f1-ac29-36d46735a629",
+      "title": "Dawi - Building in Motion",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1777284376637-gh3w57bl7jb.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1777284439524-mjccd42zj28.mp4"
+    },
+    {
+      "id": "ffaf1397-28be-46b7-8372-c69aa9af09e4",
+      "title": "Honda - Straight Up Power",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1777284926246-lhruay8ocnr.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1777284950492-wakj0nr04gq.mp4"
+    },
+    {
+      "id": "fee44cc8-f34c-4394-a19a-6ae381a16ee2",
+      "title": "Jahez - In the Sky",
+      "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1777285130553-dni062ggego.png",
+      "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1777285156998-mbehq59147i.mp4"
+    }
+  ],
+  "project_images": [
+    {
+      "id": "35c492a5-df3d-4793-8ce1-ca4cdeb4315e",
+      "project_id": "b3f8021d-c2ce-4d58-938f-edbbad4958ce",
+      "image_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/project-images/1776923741200-7c06s5pzhtf.png"
+    },
+    {
+      "id": "5dd56c14-c6c7-4be0-a8f8-123ecfdbcf44",
+      "project_id": "f98981e1-d280-4baf-a82c-85610ccb59cd",
+      "image_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/project-images/1776930428051-xy1bxp1e0l.png"
+    },
+    {
+      "id": "d61c944b-be1a-4070-b511-95aaa9fd0103",
+      "project_id": "f98981e1-d280-4baf-a82c-85610ccb59cd",
+      "image_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/project-images/1776930429903-uaev14pumt.png"
+    },
+    {
+      "id": "316a8ab2-32bf-438b-936a-65f857dee3bf",
+      "project_id": "f98981e1-d280-4baf-a82c-85610ccb59cd",
+      "image_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/project-images/1776930431843-n7277ybj5un.png"
+    },
+    {
+      "id": "072c0740-32aa-446e-8c7c-9531f63dcf59",
+      "project_id": "f98981e1-d280-4baf-a82c-85610ccb59cd",
+      "image_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/project-images/1776930433163-iv4rpp33egl.png"
+    },
+    {
+      "id": "f4a82ae8-bdbc-4217-bdcc-9f10eac42ea3",
+      "project_id": "f98981e1-d280-4baf-a82c-85610ccb59cd",
+      "image_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/project-images/1776930434851-sz83n1jjlp.png"
+    },
+    {
+      "id": "350485a4-9a7c-44fe-a366-8d949804912f",
+      "project_id": "f98981e1-d280-4baf-a82c-85610ccb59cd",
+      "image_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/project-images/1776930436186-8wwq9qjhqbq.png"
+    },
+    {
+      "id": "b987a9e7-8c0c-4c25-81e3-3f970b661a90",
+      "project_id": "f98981e1-d280-4baf-a82c-85610ccb59cd",
+      "image_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/project-images/1776930437421-atm1itqz41q.png"
+    },
+    {
+      "id": "cc835b71-ee90-44e3-a51d-0b3d7c7be453",
+      "project_id": "f98981e1-d280-4baf-a82c-85610ccb59cd",
+      "image_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/project-images/1776930438901-ze7n01qjbp.png"
+    },
+    {
+      "id": "98a94ecc-f631-4316-8e1b-2626fac0cacb",
+      "project_id": "f98981e1-d280-4baf-a82c-85610ccb59cd",
+      "image_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/project-images/1776930440050-kw334eyndb.png"
+    },
+    {
+      "id": "ae073934-6919-4ad5-9091-b75f24a7add8",
+      "project_id": "f98981e1-d280-4baf-a82c-85610ccb59cd",
+      "image_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/project-images/1776930441362-ujtbpljfkxg.png"
+    },
+    {
+      "id": "249975f7-93c7-4e32-a5d7-5dc90668c440",
+      "project_id": "450f68cd-a269-4407-aee3-6590d5535398",
+      "image_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/project-images/1777202777980-egavhqlkfxs.png"
+    },
+    {
+      "id": "53be6423-5650-4aff-8b03-1f3605dddaea",
+      "project_id": "450f68cd-a269-4407-aee3-6590d5535398",
+      "image_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/project-images/1777202821496-57d73xsgu64.png"
+    },
+    {
+      "id": "c98aa4a2-afc9-435c-9a16-7979664d274d",
+      "project_id": "450f68cd-a269-4407-aee3-6590d5535398",
+      "image_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/project-images/1777202825798-evgsizo7sth.png"
+    }
+  ],
+  "blog_posts": [],
+  "clients": [
+    {
+      "id": "326c9360-8500-4d03-adb9-6d9a442fdad1",
+      "name": "Cadillac",
+      "logo_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/client-logos/1776894013576-9m0lo4qrj1t.png"
+    },
+    {
+      "id": "a29660d4-5cce-49c1-aa81-75511d6a8943",
+      "name": "Costa",
+      "logo_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/client-logos/1776894210829-c7l5y84j2ro.jpg"
+    },
+    {
+      "id": "4567d892-81c9-475b-b0cc-a00bbe7ab236",
+      "name": "Chevrolet",
+      "logo_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/client-logos/1776894227141-kpaitl49skh.png"
+    },
+    {
+      "id": "3262926d-6f25-4f3e-9a5b-c17ab35acdcd",
+      "name": "National Geographic 1",
+      "logo_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/client-logos/1777121959583-u3ytf1rstxe.png"
+    },
+    {
+      "id": "79c9a008-84bb-4ae4-8e58-22e62d6128c3",
+      "name": "Chevrolet 1",
+      "logo_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/client-logos/1777121978029-h23sbdl9wah.png"
+    },
+    {
+      "id": "7fe12dfd-71dd-4e76-938e-f9def4520890",
+      "name": "Hongqi 1",
+      "logo_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/client-logos/1777121989149-7qf6v8mb6kv.png"
+    },
+    {
+      "id": "b0ea4a59-ed77-43dd-8980-4777772055be",
+      "name": "Ford",
+      "logo_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/client-logos/1776894390135-4sivvjmiea.png"
+    },
+    {
+      "id": "3a028a0d-1d08-4073-bc2a-c64cb93e344d",
+      "name": "BMW",
+      "logo_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/client-logos/1776894403435-iphjb4ljx4b.png"
+    },
+    {
+      "id": "d7ea14d4-d22a-4977-be55-253471ddf00c",
+      "name": "Honda",
+      "logo_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/client-logos/1776894418398-v5fbb050ig.png"
+    },
+    {
+      "id": "e6614e31-c817-43af-ba43-075d20e47125",
+      "name": "Huawei",
+      "logo_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/client-logos/1777122006492-osnnf4aq9em.png"
+    },
+    {
+      "id": "69b41abc-ac7a-42ef-804e-985216cb64af",
+      "name": "Mercedes",
+      "logo_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/client-logos/1776893971488-bilx3f6udvw.jpg"
+    },
+    {
+      "id": "905b1565-d300-4f30-8dea-9a891640ef30",
+      "name": "Caribou",
+      "logo_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/client-logos/1777066050428-o4vigffmgz.png"
+    },
+    {
+      "id": "10a8554e-5e5d-4d17-aa8b-25acf01ec39e",
+      "name": "BYD 1 ",
+      "logo_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/client-logos/1777122092048-aubhgo486fl.png"
+    },
+    {
+      "id": "4bd546d2-1adc-4194-ab75-c5a6a4ee6dbe",
+      "name": "BMW 1 ",
+      "logo_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/client-logos/1777122110333-lw0sl2mm9ys.png"
+    },
+    {
+      "id": "21ee736b-7787-4c9d-8a3f-5c7e58b699ae",
+      "name": "-",
+      "logo_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/client-logos/1777201846031-xjak2iwsr6j.png"
+    }
+  ],
+  "site_content": [
+    {
+      "id": "c9fd0d67-0211-4c09-a15d-511c0ea64d5d",
+      "key": "about_headline",
+      "value": "Astroshot is Kuwait's most ambitious creative agency."
+    },
+    {
+      "id": "51aba7ee-3d2a-496c-bda1-140126970cb9",
+      "key": "cta_headline",
+      "value": "Ready to make your brand impossible to ignore?"
+    },
+    {
+      "id": "3c499781-f043-4166-898b-36dfcbd9f56f",
+      "key": "hero_video_mobile_url",
+      "value": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/hero-video/1776929031025-lytwpvrupwe.mp4"
+    },
+    {
+      "id": "3fb94351-053e-48f7-88bd-f088a19cc5ee",
+      "key": "hero_video_url",
+      "value": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/hero-video/1776929156763-m0zyh8fnpz.mp4"
+    },
+    {
+      "id": "918d3f3e-5095-4f7e-9a5d-b0de3d76e845",
+      "key": "hero_headline",
+      "value": "We Make Brands Impossible to Ignore"
+    },
+    {
+      "id": "70cf91d7-3331-4384-a140-93b8359581cb",
+      "key": "hero_subtext",
+      "value": "Mixed Reality \u00b7 CGI \u00b7 Social Media \u00b7 AI Cinema \u00b7 Motion Graphics \u2014 Kuwait & GCC"
+    }
+  ]
+}

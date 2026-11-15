@@ -1,0 +1,26 @@
+{
+  "project": {
+    "id": "b3f8021d-c2ce-4d58-938f-edbbad4958ce",
+    "title": "Trolley - Reward Program Campaign",
+    "category": "Mixed Reality",
+    "description": "Astroshot created a high-impact VFX campaign for Trolley’s reward points app program, showing how customers earn points every time they shop and redeem them directly through the Trolley app. The video combined clear storytelling with attention-grabbing visual effects to make the reward system feel simple, exciting, and worth using. It generated over 1 million organic views across Trolley’s social media platforms, helping boost awareness of the app, customer engagement, and the value of shopping with Trolley.",
+    "thumbnail_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/thumbnails/1776923719303-yjmul27vx5l.png",
+    "media_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/media/1776893639553-kv9d5ivintr.mp4",
+    "media_type": "video",
+    "featured": true,
+    "status": "published",
+    "sort_order": 0,
+    "created_at": "2026-04-22T21:34:12.179679+00:00",
+    "updated_at": "2026-06-01T10:32:30.25343+00:00"
+  },
+  "images": [
+    {
+      "id": "35c492a5-df3d-4793-8ce1-ca4cdeb4315e",
+      "project_id": "b3f8021d-c2ce-4d58-938f-edbbad4958ce",
+      "image_url": "https://xurzuofmpwfhtlkxppej.supabase.co/storage/v1/object/public/project-images/1776923741200-7c06s5pzhtf.png",
+      "caption": null,
+      "sort_order": 0,
+      "created_at": "2026-04-23T05:55:46.520128+00:00"
+    }
+  ]
+}
