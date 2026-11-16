@@ -3,32 +3,99 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import {
+  emptyCompetitorLink,
   emptyMediaBuyingClinicQuestionnairePayload,
   emptyMediaBuyingDoctor,
   emptyMediaBuyingPreviousAdLink,
-  mediaBuyingBudgetBandOptions,
   mediaBuyingChannelOptions,
+  mediaBuyingClinicMonthlySections,
   mediaBuyingClinicQuestionnaireSections,
   mediaBuyingComplianceNotice,
   mediaBuyingHasRunAdsOptions,
+  mediaBuyingLeadChannelOptions,
+  mediaBuyingMohApprovalOptions,
   mediaBuyingPreviousGoalOptions,
   mediaBuyingPrimaryGoalOptions,
-  mediaBuyingSpendBandOptions,
   type MediaBuyingClinicQuestionnairePayload,
   type MediaBuyingDoctor,
+  type QuestionnaireSection,
   type UploadedBrandAsset,
 } from "@/lib/client-questionnaire";
+
+import type { ReactNode } from "react";
 
 type Props = {
   clientName: string;
   onSubmitted: () => void;
+  phase?: "setup" | "monthly";
+  isClinic?: boolean;
 };
 
 type AutoSaveState = "idle" | "saving" | "saved" | "error";
 
+type FileTarget = "reports" | "brandFiles" | "monthlyFiles";
+
 const fieldClass =
   "w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none transition-colors placeholder:text-white/25 focus:border-[#01F17C]";
 const textAreaClass = `${fieldClass} min-h-28 resize-y leading-relaxed`;
+const errorClass = "mt-1.5 block text-xs font-bold text-red-400";
+
+// Required fields per step id. Enforced by Continue, by the sidebar jump and by submit.
+const REQUIRED_BY_STEP: Record<string, string[]> = {
+  identity: ["identity.clinicName", "identity.contactName", "identity.email", "identity.specialties", "identity.mohApproval"],
+  previousAds: ["previousAds.hasRunAds", "previousAds.unhappyAbout"],
+  competitors: ["competitors.instagramLinks"],
+  leadsAccess: [
+    "leadsAccess.leadOwner",
+    "leadsAccess.leadChannel",
+    "leadsAccess.workingHours",
+    "leadsAccess.accessAdAccount",
+    "leadsAccess.accessPageIg",
+    "leadsAccess.accessPixel",
+    "leadsAccess.accessInbox",
+  ],
+  monthPlan: [
+    "monthPlan.promoting",
+    "monthPlan.primaryGoal",
+    "monthPlan.adBudgetExact",
+    "monthPlan.monthlyBookingTarget",
+    "monthPlan.servicePrice",
+  ],
+};
+
+// Steps that can never be "required-invalid" but are listed for completeness.
+const ACCESS_STEP_PREFIX = "leadsAccess.access";
+
+const accessChecklist: Array<{ key: string; label: string }> = [
+  { key: "leadsAccess.accessAdAccount", label: "Partner access to our Meta ad account given (how-to video)" },
+  { key: "leadsAccess.accessPageIg", label: "Facebook Page and Instagram access given" },
+  { key: "leadsAccess.accessPixel", label: "Pixel access given" },
+  { key: "leadsAccess.accessInbox", label: "WhatsApp / inbox access given" },
+];
+
+function readPath(source: unknown, path: string): unknown {
+  return path.split(".").reduce<unknown>((acc, key) => {
+    if (!acc || typeof acc !== "object") return undefined;
+    return (acc as Record<string, unknown>)[key];
+  }, source);
+}
+
+function isPathFilled(source: unknown, path: string): boolean {
+  const value = readPath(source, path);
+  if (typeof value === "boolean") return value;
+  if (Array.isArray(value)) {
+    return value.some((entry) => {
+      if (typeof entry === "string") return entry.trim().length > 0;
+      if (entry && typeof entry === "object") {
+        return Object.values(entry as Record<string, unknown>).some(
+          (inner) => typeof inner === "string" && inner.trim().length > 0
+        );
+      }
+      return false;
+    });
+  }
+  return typeof value === "string" && value.trim().length > 0;
+}
 
 function updatePath<T extends object>(source: T, path: string[], value: unknown): T {
   const [head, ...rest] = path;
@@ -51,23 +118,35 @@ function getStringValue(source: MediaBuyingClinicQuestionnairePayload, path: str
   return typeof value === "string" ? value : "";
 }
 
-function FieldLabel({ children }: { children: React.ReactNode }) {
-  return <span className="mb-2 block text-xs font-bold uppercase tracking-[0.2em] text-white/35">{children}</span>;
+function FieldLabel({ children, required }: { children: ReactNode; required?: boolean }) {
+  return (
+    <span className="mb-2 block text-xs font-bold uppercase tracking-[0.2em] text-white/35">
+      {children}
+      {required && <span className="text-[#01F17C]"> *</span>}
+    </span>
+  );
 }
 
-function TextField({ label, path, payload, setField, placeholder, required, type = "text", hint }: {
+function RequiredError({ show }: { show?: boolean }) {
+  if (!show) return null;
+  return <span className={errorClass}>This is required.</span>;
+}
+
+function TextField({ label, path, payload, setField, placeholder, required, invalid, type = "text", hint, inputMode }: {
   label: string;
   path: string;
   payload: MediaBuyingClinicQuestionnairePayload;
   setField: (path: string, value: unknown) => void;
   placeholder?: string;
   required?: boolean;
+  invalid?: boolean;
   type?: string;
   hint?: string;
+  inputMode?: "text" | "decimal" | "numeric" | "tel" | "url" | "email";
 }) {
   return (
     <label className="block">
-      <FieldLabel>{label}</FieldLabel>
+      <FieldLabel required={required}>{label}</FieldLabel>
       <input
         className={fieldClass}
         type={type}
@@ -75,38 +154,46 @@ function TextField({ label, path, payload, setField, placeholder, required, type
         onChange={(event) => setField(path, event.target.value)}
         placeholder={placeholder}
         required={required}
+        inputMode={inputMode}
+        aria-required={required ? true : undefined}
+        aria-invalid={invalid ? true : undefined}
       />
+      <RequiredError show={invalid} />
       {hint && <span className="mt-1.5 block text-xs leading-5 text-white/30">{hint}</span>}
     </label>
   );
 }
 
-function AreaField({ label, path, payload, setField, placeholder, required, hint, big }: {
+function AreaField({ label, path, payload, setField, placeholder, required, invalid, hint, big }: {
   label: string;
   path: string;
   payload: MediaBuyingClinicQuestionnairePayload;
   setField: (path: string, value: unknown) => void;
   placeholder?: string;
   required?: boolean;
+  invalid?: boolean;
   hint?: string;
   big?: boolean;
 }) {
   return (
     <label className="block">
-      <FieldLabel>{label}</FieldLabel>
+      <FieldLabel required={required}>{label}</FieldLabel>
       <textarea
         className={big ? `${textAreaClass} min-h-40` : textAreaClass}
         value={getStringValue(payload, path)}
         onChange={(event) => setField(path, event.target.value)}
         placeholder={placeholder}
         required={required}
+        aria-required={required ? true : undefined}
+        aria-invalid={invalid ? true : undefined}
       />
+      <RequiredError show={invalid} />
       {hint && <span className="mt-1.5 block text-xs leading-5 text-white/30">{hint}</span>}
     </label>
   );
 }
 
-function SelectField({ label, path, payload, setField, options, placeholder = "Choose one", required, other }: {
+function SelectField({ label, path, payload, setField, options, placeholder = "Choose one", required, invalid, other, onChange }: {
   label: string;
   path: string;
   payload: MediaBuyingClinicQuestionnairePayload;
@@ -114,7 +201,9 @@ function SelectField({ label, path, payload, setField, options, placeholder = "C
   options: string[];
   placeholder?: string;
   required?: boolean;
+  invalid?: boolean;
   other?: boolean;
+  onChange?: (value: string) => void;
 }) {
   const value = getStringValue(payload, path);
   const isCustom = Boolean(value) && !options.includes(value);
@@ -122,29 +211,37 @@ function SelectField({ label, path, payload, setField, options, placeholder = "C
   return (
     <div>
       <label className="block">
-        <FieldLabel>{label}</FieldLabel>
+        <FieldLabel required={required}>{label}</FieldLabel>
         <select
           className={fieldClass}
           value={isCustom ? "__other" : value}
           onChange={(event) => {
             if (event.target.value === "__other") {
               setField(path, " ");
+              onChange?.(" ");
               return;
             }
             setField(path, event.target.value);
+            onChange?.(event.target.value);
           }}
           required={required}
+          aria-required={required ? true : undefined}
+          aria-invalid={invalid ? true : undefined}
         >
           <option value="">{placeholder}</option>
           {options.map((option) => <option key={option}>{option}</option>)}
           {other && <option value="__other">Other / not listed</option>}
         </select>
       </label>
+      <RequiredError show={invalid} />
       {isCustom && (
         <input
           className={`${fieldClass} mt-2`}
           value={value.trim()}
-          onChange={(event) => setField(path, event.target.value)}
+          onChange={(event) => {
+            setField(path, event.target.value);
+            onChange?.(event.target.value);
+          }}
           placeholder="Type the channel or answer"
         />
       )}
@@ -161,13 +258,19 @@ function Notice({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted }: Props) {
+export default function MediaBuyingClinicQuestionnaire({
+  clientName,
+  onSubmitted,
+  phase = "setup",
+  isClinic = true,
+}: Props) {
   const [payload, setPayload] = useState<MediaBuyingClinicQuestionnairePayload>(() => {
     const initial = emptyMediaBuyingClinicQuestionnairePayload();
     if (clientName) initial.identity.clinicName = clientName;
     return initial;
   });
   const [activeStep, setActiveStep] = useState(0);
+  const [touchedSteps, setTouchedSteps] = useState<Record<number, true>>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [uploading, setUploading] = useState(false);
@@ -175,13 +278,116 @@ export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted
   const [autoSaveState, setAutoSaveState] = useState<AutoSaveState>("idle");
   const [loadedDraft, setLoadedDraft] = useState(false);
   const lastSavedRef = useRef("");
+  const saveTimerRef = useRef<number | null>(null);
+  const submittingRef = useRef(false);
 
-  const section = mediaBuyingClinicQuestionnaireSections[activeStep];
-  const progress = ((activeStep + 1) / mediaBuyingClinicQuestionnaireSections.length) * 100;
+  // ----- active section array (phase + conditional steps) ----------------
+
+  const visibleSections: QuestionnaireSection[] = (phase === "monthly"
+    ? mediaBuyingClinicMonthlySections
+    : mediaBuyingClinicQuestionnaireSections
+  ).filter((item) => {
+    if (!isClinic && item.id === "doctors") return false;
+    if (!isClinic && item.id === "leadsAccess") return false;
+    // Section 02 stays visible when the answer is "No" — the select that sets
+    // hasRunAds lives inside it, so removing it would trap the client on "No".
+    return true;
+  });
+
+  const safeStep = Math.min(activeStep, visibleSections.length - 1);
+  const section = visibleSections[safeStep] ?? mediaBuyingClinicQuestionnaireSections[0];
+  const progress = ((safeStep + 1) / visibleSections.length) * 100;
+  const isLastStep = safeStep === visibleSections.length - 1;
+
+  const activeRequired = (stepId: string): string[] => {
+    if (stepId === "identity" && !isClinic) {
+      return REQUIRED_BY_STEP.identity.filter(
+        (path) => path !== "identity.mohApproval" && path !== "identity.mohOwner"
+      );
+    }
+    const base = REQUIRED_BY_STEP[stepId] ?? [];
+    // MoH owner is only required when the clinic says they already have approval.
+    if (stepId === "identity" && payload.identity.mohApproval === "Yes" && !base.includes("identity.mohOwner")) {
+      return [...base, "identity.mohOwner"];
+    }
+    return base;
+  };
+
+  const invalidPathsFor = (stepId: string): string[] =>
+    activeRequired(stepId).filter((path) => !isPathFilled(payload, path));
+
+  const isStepValid = (index: number): boolean => {
+    const target = visibleSections[index];
+    if (!target) return true;
+    return invalidPathsFor(target.id).length === 0;
+  };
+
+  const firstInvalidIndex = (): number => visibleSections.findIndex((_, index) => !isStepValid(index));
+
+  const showErrorFor = (path: string): boolean =>
+    Boolean(touchedSteps[safeStep]) && !isPathFilled(payload, path);
+
+  const markStepTouched = (index: number) => setTouchedSteps((current) => ({ ...current, [index]: true }));
 
   const setField = (path: string, value: unknown) => {
     setPayload((current) => updatePath(current, path.split("."), value));
     setAutoSaveState("idle");
+  };
+
+  // ----- hiding section 02 clears its answers (only on explicit change) --
+
+  const clearPreviousAdsAnswers = (current: MediaBuyingClinicQuestionnairePayload): MediaBuyingClinicQuestionnairePayload => ({
+    ...current,
+    previousAds: {
+      ...current.previousAds,
+      hasRunAds: current.previousAds.hasRunAds,
+      channels: "",
+      otherChannels: "",
+      timeframe: "",
+      duration: "",
+      goal: "",
+      results: "",
+      unhappyAbout: "",
+      spendBand: "",
+      creativeObservations: "",
+      reports: [],
+      adLinks: [emptyMediaBuyingPreviousAdLink()],
+    },
+  });
+
+  const handleHasRunAdsChange = (value: string) => {
+    if (value !== "No") return;
+    setPayload((current) => clearPreviousAdsAnswers(current));
+    setAutoSaveState("idle");
+  };
+
+  const handleMohApprovalChange = (value: string) => {
+    if (value === "Yes") return;
+    setPayload((current) => ({
+      ...current,
+      identity: { ...current.identity, mohOwner: "" },
+    }));
+    setAutoSaveState("idle");
+  };
+
+  // ----- navigation -----------------------------------------------------
+
+  const goNext = () => {
+    markStepTouched(safeStep);
+    if (isStepValid(safeStep)) {
+      setActiveStep(Math.min(visibleSections.length - 1, safeStep + 1));
+      setSubmitError("");
+    }
+  };
+
+  const jumpToStep = (index: number) => {
+    if (index === safeStep) return;
+    // Leaving a step only locks it in if it was actually attempted.
+    if (!isStepValid(safeStep)) {
+      markStepTouched(safeStep);
+      return;
+    }
+    setActiveStep(index);
   };
 
   useEffect(() => {
@@ -192,24 +398,39 @@ export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted
         if (cancelled) return;
         if (data.questionnaireDraftType === "media_buying_clinic" && data.questionnaireDraft) {
           const draft = data.questionnaireDraft;
-          setPayload((current) => ({
+          // Merge the draft OVER the empty payload — never the reverse. Old drafts
+          // (no competitors/leadsAccess/etc.) must not throw anywhere downstream.
+          const base = emptyMediaBuyingClinicQuestionnairePayload();
+          const merged: MediaBuyingClinicQuestionnairePayload = {
+            ...base,
             ...draft,
-            identity: {
-              ...draft.identity,
-              clinicName: draft.identity?.clinicName || current.identity.clinicName || clientName,
-            },
-            previousAds: {
-              ...draft.previousAds,
-              reports: draft.previousAds?.reports ?? [],
-              adLinks: draft.previousAds?.adLinks?.length ? draft.previousAds.adLinks : [emptyMediaBuyingPreviousAdLink()],
-            },
-            doctors: draft.doctors?.length ? draft.doctors : [emptyMediaBuyingDoctor()],
-            assets: {
-              ...draft.assets,
-              brandFiles: draft.assets?.brandFiles ?? [],
-            },
-          }));
-          lastSavedRef.current = JSON.stringify(draft);
+            identity: { ...base.identity, ...(draft.identity ?? {}) },
+            previousAds: { ...base.previousAds, ...(draft.previousAds ?? {}) },
+            monthPlan: { ...base.monthPlan, ...(draft.monthPlan ?? {}) },
+            competitors: { ...base.competitors, ...(draft.competitors ?? {}) },
+            leadsAccess: { ...base.leadsAccess, ...(draft.leadsAccess ?? {}) },
+            monthlyExtras: { ...base.monthlyExtras, ...(draft.monthlyExtras ?? {}) },
+            assets: { ...base.assets, ...(draft.assets ?? {}) },
+          };
+          merged.identity.clinicName =
+            merged.identity.clinicName || clientName;
+          merged.previousAds.reports = merged.previousAds.reports ?? [];
+          // A pre-v2 draft stored a band label in spendBand; a number input cannot hold it.
+          merged.previousAds.spendBand = /^\d*\.?\d*$/.test(merged.previousAds.spendBand ?? "")
+            ? merged.previousAds.spendBand ?? ""
+            : "";
+          merged.previousAds.adLinks = merged.previousAds.adLinks?.length
+            ? merged.previousAds.adLinks
+            : [emptyMediaBuyingPreviousAdLink()];
+          merged.competitors.instagramLinks = merged.competitors.instagramLinks?.length
+            ? merged.competitors.instagramLinks
+            : [emptyCompetitorLink()];
+          merged.monthlyExtras.monthlyFiles = merged.monthlyExtras.monthlyFiles ?? [];
+          merged.assets.brandFiles = merged.assets.brandFiles ?? [];
+          merged.doctors = merged.doctors?.length ? merged.doctors : [emptyMediaBuyingDoctor()];
+
+          setPayload(merged);
+          lastSavedRef.current = JSON.stringify(merged);
           setAutoSaveState("saved");
         }
         setLoadedDraft(true);
@@ -228,6 +449,8 @@ export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted
     if (serialized === lastSavedRef.current) return;
 
     const timer = window.setTimeout(async () => {
+      // The final submit may have started after this timer was scheduled.
+      if (submittingRef.current) return;
       setAutoSaveState("saving");
       const res = await fetch("/api/client-questionnaire", {
         method: "POST",
@@ -243,6 +466,7 @@ export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted
       lastSavedRef.current = JSON.stringify(payload);
       setAutoSaveState("saved");
     }, 1000);
+    saveTimerRef.current = timer;
 
     return () => window.clearTimeout(timer);
   }, [loadedDraft, payload, submitting, uploading]);
@@ -306,9 +530,50 @@ export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted
     setAutoSaveState("idle");
   };
 
+  // ----- competitor rows (min 1, max 3) ---------------------------------
+
+  const setCompetitorLink = (index: number, url: string) => {
+    setPayload((current) => ({
+      ...current,
+      competitors: {
+        ...current.competitors,
+        instagramLinks: current.competitors.instagramLinks.map((link, i) => (i === index ? { url } : link)),
+      },
+    }));
+    setAutoSaveState("idle");
+  };
+
+  const addCompetitorLink = () => {
+    setPayload((current) => ({
+      ...current,
+      competitors: {
+        ...current.competitors,
+        instagramLinks:
+          current.competitors.instagramLinks.length >= 3
+            ? current.competitors.instagramLinks
+            : [...current.competitors.instagramLinks, emptyCompetitorLink()],
+      },
+    }));
+    setAutoSaveState("idle");
+  };
+
+  const removeCompetitorLink = (index: number) => {
+    setPayload((current) => ({
+      ...current,
+      competitors: {
+        ...current.competitors,
+        instagramLinks:
+          current.competitors.instagramLinks.length <= 1
+            ? [emptyCompetitorLink()]
+            : current.competitors.instagramLinks.filter((_, i) => i !== index),
+      },
+    }));
+    setAutoSaveState("idle");
+  };
+
   // ----- uploads ---------------------------------------------------------
 
-  const uploadFiles = async (files: FileList, target: "reports" | "brandFiles") => {
+  const uploadFiles = async (files: FileList, target: FileTarget) => {
     setUploading(true);
     setUploadError("");
 
@@ -347,20 +612,30 @@ export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted
         uploaded.push(data.file);
       }
 
-      setPayload((current) =>
-        target === "reports"
-          ? {
-              ...current,
-              previousAds: {
-                ...current.previousAds,
-                reports: [...current.previousAds.reports, ...uploaded],
-              },
-            }
-          : {
-              ...current,
-              assets: { ...current.assets, brandFiles: [...current.assets.brandFiles, ...uploaded] },
-            }
-      );
+      setPayload((current) => {
+        if (target === "reports") {
+          return {
+            ...current,
+            previousAds: {
+              ...current.previousAds,
+              reports: [...current.previousAds.reports, ...uploaded],
+            },
+          };
+        }
+        if (target === "monthlyFiles") {
+          return {
+            ...current,
+            monthlyExtras: {
+              ...current.monthlyExtras,
+              monthlyFiles: [...current.monthlyExtras.monthlyFiles, ...uploaded],
+            },
+          };
+        }
+        return {
+          ...current,
+          assets: { ...current.assets, brandFiles: [...current.assets.brandFiles, ...uploaded] },
+        };
+      });
       setAutoSaveState("idle");
     } catch (error) {
       setUploadError(error instanceof Error ? error.message : "Upload failed");
@@ -369,37 +644,68 @@ export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted
     }
   };
 
-  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>, target: "reports" | "brandFiles") => {
+  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>, target: FileTarget) => {
     const files = event.target.files;
     if (!files?.length) return;
     await uploadFiles(files, target);
     event.target.value = "";
   };
 
-  const removeFile = (target: "reports" | "brandFiles", url: string) => {
-    setPayload((current) =>
-      target === "reports"
-        ? {
-            ...current,
-            previousAds: {
-              ...current.previousAds,
-              reports: current.previousAds.reports.filter((file) => file.url !== url),
-            },
-          }
-        : {
-            ...current,
-            assets: {
-              ...current.assets,
-              brandFiles: current.assets.brandFiles.filter((file) => file.url !== url),
-            },
-          }
-    );
+  const removeFile = (target: FileTarget, url: string) => {
+    setPayload((current) => {
+      if (target === "reports") {
+        return {
+          ...current,
+          previousAds: {
+            ...current.previousAds,
+            reports: current.previousAds.reports.filter((file) => file.url !== url),
+          },
+        };
+      }
+      if (target === "monthlyFiles") {
+        return {
+          ...current,
+          monthlyExtras: {
+            ...current.monthlyExtras,
+            monthlyFiles: current.monthlyExtras.monthlyFiles.filter((file) => file.url !== url),
+          },
+        };
+      }
+      return {
+        ...current,
+        assets: {
+          ...current.assets,
+          brandFiles: current.assets.brandFiles.filter((file) => file.url !== url),
+        },
+      };
+    });
     setAutoSaveState("idle");
   };
 
   const handleSubmit = async () => {
+    // Re-check every visible step before posting anything.
+    const invalidIndex = firstInvalidIndex();
+    if (invalidIndex !== -1) {
+      setTouchedSteps((current) => {
+        const next: Record<number, true> = { ...current };
+        visibleSections.forEach((_, index) => {
+          if (!isStepValid(index)) next[index] = true;
+        });
+        return next;
+      });
+      setActiveStep(invalidIndex);
+      setSubmitError("Some required fields are still empty. Check the highlighted answers below.");
+      return;
+    }
+
     setSubmitting(true);
+    submittingRef.current = true;
     setSubmitError("");
+    // Cancel any pending autosave so it cannot fire on top of the final submit.
+    if (saveTimerRef.current !== null) {
+      window.clearTimeout(saveTimerRef.current);
+      saveTimerRef.current = null;
+    }
 
     const res = await fetch("/api/client-questionnaire", {
       method: "POST",
@@ -408,6 +714,7 @@ export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted
     });
 
     setSubmitting(false);
+    submittingRef.current = false;
 
     if (!res.ok) {
       const data = (await res.json().catch(() => ({}))) as { error?: string };
@@ -420,7 +727,7 @@ export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted
     onSubmitted();
   };
 
-  const fileList = (files: UploadedBrandAsset[], target: "reports" | "brandFiles", emptyLabel: string) => (
+  const fileList = (files: UploadedBrandAsset[], target: FileTarget, emptyLabel: string) => (
     <div className="mt-5 space-y-2">
       {files.length === 0 ? (
         <p className="rounded-xl border border-dashed border-white/10 px-4 py-5 text-sm text-white/35">{emptyLabel}</p>
@@ -467,13 +774,14 @@ export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted
             <div className="h-full rounded-full bg-[#01F17C] transition-all duration-300" style={{ width: `${progress}%` }} />
           </div>
           <div className="space-y-2">
-            {mediaBuyingClinicQuestionnaireSections.map((item, index) => (
+            {visibleSections.map((item, index) => (
               <button
                 key={item.id}
                 type="button"
-                onClick={() => setActiveStep(index)}
+                onClick={() => jumpToStep(index)}
+                aria-current={safeStep === index ? "step" : undefined}
                 className={`w-full rounded-xl border px-4 py-3 text-left transition-colors ${
-                  activeStep === index
+                  safeStep === index
                     ? "border-[#01F17C]/50 bg-[#01F17C]/10 text-white"
                     : "border-white/10 bg-white/[0.03] text-white/45 hover:text-white"
                 }`}
@@ -494,15 +802,44 @@ export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted
           <p className="mt-4 max-w-2xl text-sm leading-7 text-white/55">{section.description}</p>
 
           <div className="mt-8">
+            {safeStep === 0 && phase === "setup" && (
+              <p className="mb-6 text-xs font-bold text-white/35">Fields marked * are required.</p>
+            )}
+
             {/* 01 — Client identity */}
-            {activeStep === 0 && (
+            {section.id === "identity" && (
               <div className="grid gap-4 md:grid-cols-2">
-                <TextField label="Clinic name" path="identity.clinicName" payload={payload} setField={setField} placeholder="Arms Center" required />
+                <TextField
+                  label={isClinic ? "Clinic name" : "Business name"}
+                  path="identity.clinicName"
+                  payload={payload}
+                  setField={setField}
+                  placeholder="Arms Center"
+                  required
+                  invalid={showErrorFor("identity.clinicName")}
+                />
                 <TextField label="Instagram handle" path="identity.instagram" payload={payload} setField={setField} placeholder="@armscenter" />
                 <TextField label="Website" path="identity.website" payload={payload} setField={setField} placeholder="https://" />
-                <TextField label="Contact name" path="identity.contactName" payload={payload} setField={setField} placeholder="Full name" required />
-                <TextField label="Email" path="identity.email" payload={payload} setField={setField} placeholder="name@clinic.com" type="email" required />
-                <TextField label="Phone" path="identity.phone" payload={payload} setField={setField} placeholder="+965" />
+                <TextField
+                  label="Contact name"
+                  path="identity.contactName"
+                  payload={payload}
+                  setField={setField}
+                  placeholder="Full name"
+                  required
+                  invalid={showErrorFor("identity.contactName")}
+                />
+                <TextField
+                  label="Email"
+                  path="identity.email"
+                  payload={payload}
+                  setField={setField}
+                  placeholder="name@clinic.com"
+                  type="email"
+                  required
+                  invalid={showErrorFor("identity.email")}
+                />
+                <TextField label="Phone" path="identity.phone" payload={payload} setField={setField} placeholder="+965" inputMode="tel" />
                 <div className="md:col-span-2">
                   <AreaField
                     label="Location / branches"
@@ -514,20 +851,74 @@ export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted
                 </div>
                 <div className="md:col-span-2">
                   <AreaField
-                    label="Specialties the clinic covers overall"
+                    label={isClinic ? "Specialties the clinic covers overall" : "Services you offer overall"}
                     path="identity.specialties"
                     payload={payload}
                     setField={setField}
-                    placeholder="Dermatology, plastic surgery, dentistry, laser, hair transplant…"
+                    placeholder={
+                      isClinic
+                        ? "Dermatology, plastic surgery, dentistry, laser, hair transplant…"
+                        : "e.g. what you sell or do"
+                    }
                     required
+                    invalid={showErrorFor("identity.specialties")}
                   />
                 </div>
+                {isClinic && (
+                  <>
+                    <SelectField
+                      label="Ministry of Health approval needed?"
+                      path="identity.mohApproval"
+                      payload={payload}
+                      setField={setField}
+                      options={mediaBuyingMohApprovalOptions}
+                      required
+                      invalid={showErrorFor("identity.mohApproval")}
+                      onChange={handleMohApprovalChange}
+                    />
+                    {payload.identity.mohApproval === "Yes" && (
+                      <TextField
+                        label="Who handles MoH approval?"
+                        path="identity.mohOwner"
+                        payload={payload}
+                        setField={setField}
+                        placeholder="Name / agency / internal team"
+                        required
+                        invalid={showErrorFor("identity.mohOwner")}
+                      />
+                    )}
+                    {payload.identity.mohApproval === "Yes" && payload.identity.mohOwner.trim() === "" && showErrorFor("identity.mohOwner") && (
+                      <p className={errorClass}>Tell us who handles MoH approval when you select &ldquo;Yes&rdquo;.</p>
+                    )}
+                  </>
+                )}
               </div>
             )}
 
             {/* 02 — Previous advertising */}
-            {activeStep === 1 && (
+            {section.id === "previousAds" && (
               <div className="space-y-6">
+                {payload.previousAds.hasRunAds === "No" ? (
+                  <>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <SelectField
+                        label="Have you run paid ads before?"
+                        path="previousAds.hasRunAds"
+                        payload={payload}
+                        setField={setField}
+                        options={mediaBuyingHasRunAdsOptions}
+                        required
+                        invalid={showErrorFor("previousAds.hasRunAds")}
+                        onChange={handleHasRunAdsChange}
+                      />
+                    </div>
+                    <p className="text-sm leading-7 text-white/60">
+                      No problem — we will start from scratch. Change this to &ldquo;Yes&rdquo; if you have run ads
+                      before.
+                    </p>
+                  </>
+                ) : (
+                  <>
                 <div className="rounded-2xl border border-[#01F17C]/25 bg-[#01F17C]/[0.05] p-5">
                   <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#01F17C]">Start here</p>
                   <p className="mt-2 text-sm leading-7 text-white/60">
@@ -544,44 +935,53 @@ export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted
                     setField={setField}
                     options={mediaBuyingHasRunAdsOptions}
                     required
+                    invalid={showErrorFor("previousAds.hasRunAds")}
+                    onChange={handleHasRunAdsChange}
                   />
-                  <SelectField
-                    label="Main channel(s) used"
-                    path="previousAds.channels"
-                    payload={payload}
-                    setField={setField}
-                    options={mediaBuyingChannelOptions}
-                    placeholder="Pick the main one — list the rest below"
-                    other
-                  />
-                  <TextField label="Roughly when" path="previousAds.timeframe" payload={payload} setField={setField} placeholder="e.g. last Ramadan, mid-2025" />
-                  <TextField label="For how long" path="previousAds.duration" payload={payload} setField={setField} placeholder="e.g. 3 months, on and off for a year" />
-                  <SelectField
-                    label="What was the goal of those ads?"
-                    path="previousAds.goal"
-                    payload={payload}
-                    setField={setField}
-                    options={mediaBuyingPreviousGoalOptions}
-                  />
-                  <SelectField
-                    label="Approximate spend level"
-                    path="previousAds.spendBand"
-                    payload={payload}
-                    setField={setField}
-                    options={mediaBuyingSpendBandOptions}
-                    placeholder="Choose a band"
-                  />
+                  {payload.previousAds.hasRunAds !== "No" && (
+                    <>
+                      <SelectField
+                        label="Main channel(s) used"
+                        path="previousAds.channels"
+                        payload={payload}
+                        setField={setField}
+                        options={mediaBuyingChannelOptions}
+                        placeholder="Pick the main one — list the rest below"
+                        other
+                      />
+                      <TextField label="Roughly when" path="previousAds.timeframe" payload={payload} setField={setField} placeholder="e.g. last Ramadan, mid-2025" />
+                      <TextField label="For how long" path="previousAds.duration" payload={payload} setField={setField} placeholder="e.g. 3 months, on and off for a year" />
+                      <SelectField
+                        label="What was the goal of those ads?"
+                        path="previousAds.goal"
+                        payload={payload}
+                        setField={setField}
+                        options={mediaBuyingPreviousGoalOptions}
+                      />
+                      <TextField
+                        label="Approximate monthly spend on ads, in KWD"
+                        path="previousAds.spendBand"
+                        payload={payload}
+                        setField={setField}
+                        placeholder="e.g. 800"
+                        hint="Ad spend paid to the platform only. Do not include agency or management fees."
+                        inputMode="decimal"
+                      />
+                    </>
+                  )}
                 </div>
 
-                <div className="grid gap-4">
-                  <AreaField
-                    label="Any other channels, in your own words"
-                    path="previousAds.otherChannels"
-                    payload={payload}
-                    setField={setField}
-                    placeholder="e.g. Instagram plus some Snapchat boosts, run by a freelancer"
-                  />
-                </div>
+                {payload.previousAds.hasRunAds === "No" ? null : (
+                  <>
+                    <div className="grid gap-4">
+                      <AreaField
+                        label="Any other channels, in your own words"
+                        path="previousAds.otherChannels"
+                        payload={payload}
+                        setField={setField}
+                        placeholder="e.g. Instagram plus some Snapchat boosts, run by a freelancer"
+                      />
+                    </div>
 
                 <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
                   <FieldLabel>What results did you get?</FieldLabel>
@@ -607,7 +1007,10 @@ export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted
                     onChange={(event) => setField("previousAds.unhappyAbout", event.target.value)}
                     placeholder="Tell us everything you were unhappy about."
                     required
+                    aria-required={true}
+                    aria-invalid={showErrorFor("previousAds.unhappyAbout") || undefined}
                   />
+                  <RequiredError show={showErrorFor("previousAds.unhappyAbout")} />
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
@@ -688,11 +1091,15 @@ export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted
                   setField={setField}
                   placeholder="e.g. Doctor talking to camera performed better than stock footage. Offer posts got clicks but bad bookings."
                 />
+                      </>
+                    )}
+                  </>
+                )}
               </div>
             )}
 
-            {/* 03 — This month's plan */}
-            {activeStep === 2 && (
+            {/* This month's plan (monthly phase, step 01) */}
+            {section.id === "monthPlan" && (
               <div className="space-y-6">
                 <AreaField
                   label="What do you want to promote this month?"
@@ -701,6 +1108,7 @@ export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted
                   setField={setField}
                   placeholder="A service, an offer, a doctor, the clinic as a whole…"
                   required
+                  invalid={showErrorFor("monthPlan.promoting")}
                 />
                 <div className="grid gap-4 md:grid-cols-2">
                   <SelectField
@@ -710,14 +1118,37 @@ export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted
                     setField={setField}
                     options={mediaBuyingPrimaryGoalOptions}
                     required
+                    invalid={showErrorFor("monthPlan.primaryGoal")}
                   />
-                  <SelectField
-                    label="Budget band for this month"
-                    path="monthPlan.budgetBand"
+                  <TextField
+                    label="Monthly ad budget paid to Meta, in KWD"
+                    path="monthPlan.adBudgetExact"
                     payload={payload}
                     setField={setField}
-                    options={mediaBuyingBudgetBandOptions}
-                    placeholder="Choose a band"
+                    placeholder="e.g. 800"
+                    hint="This is the ad budget paid to Meta. It does not include Astroshot's fee."
+                    inputMode="numeric"
+                    required
+                    invalid={showErrorFor("monthPlan.adBudgetExact")}
+                  />
+                  <TextField
+                    label="How many bookings a month would make you happy?"
+                    path="monthPlan.monthlyBookingTarget"
+                    payload={payload}
+                    setField={setField}
+                    placeholder="e.g. 40 bookings, or 3 new patients per doctor"
+                    required
+                    invalid={showErrorFor("monthPlan.monthlyBookingTarget")}
+                  />
+                  <TextField
+                    label="Price of the service we're promoting (KWD)"
+                    path="monthPlan.servicePrice"
+                    payload={payload}
+                    setField={setField}
+                    placeholder="e.g. 250 per session"
+                    inputMode="numeric"
+                    required
+                    invalid={showErrorFor("monthPlan.servicePrice")}
                   />
                 </div>
 
@@ -747,8 +1178,8 @@ export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted
               </div>
             )}
 
-            {/* 04 — Doctors (repeatable) */}
-            {activeStep === 3 && (
+            {/* Doctors (repeatable) — monthly phase, clinics only */}
+            {section.id === "doctors" && (
               <div className="space-y-6">
                 <Notice>{mediaBuyingComplianceNotice}</Notice>
 
@@ -851,8 +1282,8 @@ export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted
               </div>
             )}
 
-            {/* 05 — Assets & approvals */}
-            {activeStep === 4 && (
+            {/* Assets & approvals (setup, step 03) */}
+            {section.id === "assets" && (
               <div className="space-y-6">
                 <div className="grid gap-4 md:grid-cols-2">
                   <SelectableGroup
@@ -898,14 +1329,188 @@ export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted
                     <TextField label="Drive link for anything too large to upload" path="assets.driveLink" payload={payload} setField={setField} placeholder="Google Drive / Dropbox link" />
                   </div>
                 </div>
+              </div>
+            )}
+
+            {/* Competitors (setup, step 04) */}
+            {section.id === "competitors" && (
+              <div className="space-y-6">
+                <div>
+                  <div className="mb-3 flex items-center justify-between gap-3">
+                    <div>
+                      <FieldLabel required>Top 3 competitor clinics</FieldLabel>
+                      <p className="text-xs leading-6 text-white/35">
+                        Paste their Instagram profiles. At least one, up to three.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={addCompetitorLink}
+                      disabled={payload.competitors.instagramLinks.length >= 3}
+                      className="shrink-0 rounded-lg bg-[#01F17C] px-3 py-2 text-xs font-black text-[#050505] transition-colors hover:bg-white disabled:opacity-30"
+                    >
+                      + Add competitor
+                    </button>
+                  </div>
+                  <div className="space-y-3">
+                    {payload.competitors.instagramLinks.map((link, index) => (
+                      <div key={index} className="flex gap-2">
+                        <input
+                          className={fieldClass}
+                          value={link.url}
+                          onChange={(event) => setCompetitorLink(index, event.target.value)}
+                          placeholder="https://instagram.com/…"
+                          inputMode="url"
+                          aria-required={true}
+                          aria-invalid={showErrorFor("competitors.instagramLinks") || undefined}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeCompetitorLink(index)}
+                          disabled={payload.competitors.instagramLinks.length <= 1}
+                          className="shrink-0 rounded-lg bg-white/5 px-3 py-1.5 text-xs font-bold text-white/45 hover:text-white disabled:opacity-30"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <RequiredError show={showErrorFor("competitors.instagramLinks")} />
+                </div>
 
                 <AreaField
-                  label="Anything else we should know?"
-                  path="assets.notes"
+                  label="What they do better than you"
+                  path="competitors.theirStrengths"
                   payload={payload}
                   setField={setField}
-                  placeholder="Sensitivities, past agencies to avoid mentioning, competitor clinics we should never reference, internal politics, anything at all."
+                  placeholder="Be honest — faster answers, better offers, stronger brand, more doctors…"
                 />
+                <AreaField
+                  label="What you do better than them"
+                  path="competitors.ourStrengths"
+                  payload={payload}
+                  setField={setField}
+                  placeholder="Better doctors, newer equipment, faster appointments, results, pricing clarity…"
+                />
+              </div>
+            )}
+
+            {/* Leads & access (setup, step 05) */}
+            {section.id === "leadsAccess" && (
+              <div className="space-y-6">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <TextField
+                    label="Who will answer the leads?"
+                    path="leadsAccess.leadOwner"
+                    payload={payload}
+                    setField={setField}
+                    placeholder="Name and phone number"
+                    required
+                    invalid={showErrorFor("leadsAccess.leadOwner")}
+                  />
+                  <SelectField
+                    label="Where do leads arrive today?"
+                    path="leadsAccess.leadChannel"
+                    payload={payload}
+                    setField={setField}
+                    options={mediaBuyingLeadChannelOptions}
+                    required
+                    invalid={showErrorFor("leadsAccess.leadChannel")}
+                  />
+                  <TextField
+                    label="Their working hours"
+                    path="leadsAccess.workingHours"
+                    payload={payload}
+                    setField={setField}
+                    placeholder="e.g. Sat–Thu 10am–10pm"
+                    required
+                    invalid={showErrorFor("leadsAccess.workingHours")}
+                  />
+                </div>
+
+                <div>
+                  <FieldLabel required>Access checklist</FieldLabel>
+                  <div className="grid gap-2">
+                    {accessChecklist.map((item) => {
+                      const checked = Boolean(readPath(payload, item.key));
+                      return (
+                        <button
+                          key={item.key}
+                          type="button"
+                          role="checkbox"
+                          aria-checked={checked}
+                          aria-required={true}
+                          aria-invalid={showErrorFor(item.key) || undefined}
+                          onClick={() => setField(item.key, !checked)}
+                          className={`flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left text-sm font-semibold transition-colors ${
+                            checked
+                              ? "border-[#01F17C]/60 bg-[#01F17C]/10 text-[#01F17C]"
+                              : "border-white/10 bg-white/[0.03] text-white/60 hover:text-white"
+                          }`}
+                        >
+                          <span
+                            aria-hidden="true"
+                            className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border ${
+                              checked ? "border-[#01F17C]/60 text-[#01F17C]" : "border-white/20 text-transparent"
+                            }`}
+                          >
+                            ✓
+                          </span>
+                          {item.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <RequiredError show={showErrorFor("leadsAccess.accessAdAccount")} />
+                  {Boolean(touchedSteps[safeStep]) &&
+                    accessChecklist.some((item) => !readPath(payload, item.key)) && (
+                      <p className={errorClass}>
+                        All four access items must be ticked before we can start. If you are stuck on any of them, write
+                        &ldquo;need help&rdquo; in the working hours field and we will walk you through it.
+                      </p>
+                    )}
+                </div>
+              </div>
+            )}
+
+            {/* This month's extras (monthly, step 03) */}
+            {section.id === "monthlyExtras" && (
+              <div className="space-y-6">
+                <AreaField
+                  label="New material available this month"
+                  path="monthlyExtras.monthlyMaterial"
+                  payload={payload}
+                  setField={setField}
+                  placeholder="New footage, new doctor, new offer, new clinic photos…"
+                />
+                <AreaField
+                  label="Anything else about this month"
+                  path="monthlyExtras.monthlyNotes"
+                  payload={payload}
+                  setField={setField}
+                  placeholder="Sensitivities, dates to avoid, competitor clinics never to reference…"
+                />
+                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                  <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div>
+                      <FieldLabel>Uploads for this month</FieldLabel>
+                      <p className="text-sm leading-7 text-white/55">Footage, photos, or anything the creative team should work from this month.</p>
+                    </div>
+                    <label className="inline-flex cursor-pointer items-center justify-center rounded-xl bg-[#01F17C] px-5 py-3 text-sm font-black text-[#050505] transition-colors hover:bg-white">
+                      {uploading ? "Uploading..." : "Upload Files"}
+                      <input
+                        type="file"
+                        multiple
+                        accept=".pdf,.png,.jpg,.jpeg,.webp,.svg,.zip,.ai,.eps,.mp4,.mov"
+                        onChange={(event) => handleUpload(event, "monthlyFiles")}
+                        disabled={uploading}
+                        className="sr-only"
+                      />
+                    </label>
+                  </div>
+                  {uploadError && <p className="mt-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">{uploadError}</p>}
+                  {fileList(payload.monthlyExtras.monthlyFiles, "monthlyFiles", "No files uploaded for this month yet.")}
+                </div>
               </div>
             )}
           </div>
@@ -915,17 +1520,20 @@ export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted
           <div className="mt-8 flex flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row sm:justify-between">
             <button
               type="button"
-              onClick={() => setActiveStep(Math.max(0, activeStep - 1))}
-              disabled={activeStep === 0}
+              onClick={() => setActiveStep(Math.max(0, safeStep - 1))}
+              disabled={safeStep === 0}
               className="rounded-xl border border-white/10 px-5 py-3 text-sm font-bold text-white/65 transition-colors hover:text-white disabled:opacity-30"
             >
               Back
             </button>
-            {activeStep < mediaBuyingClinicQuestionnaireSections.length - 1 ? (
+            {!isLastStep ? (
               <button
                 type="button"
-                onClick={() => setActiveStep(Math.min(mediaBuyingClinicQuestionnaireSections.length - 1, activeStep + 1))}
-                className="rounded-xl bg-[#01F17C] px-6 py-3 text-sm font-black text-[#050505] transition-colors hover:bg-white"
+                onClick={goNext}
+                aria-disabled={!isStepValid(safeStep)}
+                className={`rounded-xl bg-[#01F17C] px-6 py-3 text-sm font-black text-[#050505] transition-colors hover:bg-white ${
+                  isStepValid(safeStep) ? "" : "opacity-50 cursor-not-allowed"
+                }`}
               >
                 Continue
               </button>
@@ -936,7 +1544,11 @@ export default function MediaBuyingClinicQuestionnaire({ clientName, onSubmitted
                 disabled={submitting}
                 className="rounded-xl bg-[#01F17C] px-6 py-3 text-sm font-black text-[#050505] transition-colors hover:bg-white disabled:opacity-50"
               >
-                {submitting ? "Submitting..." : "Submit Media Buying Brief"}
+                {submitting
+                  ? "Submitting..."
+                  : phase === "monthly"
+                    ? "Submit Monthly Brief"
+                    : "Submit Media Buying Brief"}
               </button>
             )}
           </div>
