@@ -272,12 +272,48 @@ export async function POST(request: Request) {
     const promoting = trim(clinic.monthPlan?.promoting);
     const unhappyAbout = trim(clinic.previousAds?.unhappyAbout);
 
-    if (!clinicName || !contactName || !email || !promoting || !unhappyAbout) {
+    // v2 fields. Only enforced when the field is present in the submission, so
+    // drafts saved before v2 can still be submitted without being blocked here.
+    const isBlank = (value: unknown) => !trim(value);
+    const v2Required: Array<[string, string]> = [
+      ["what you were unhappy about in previous advertising", unhappyAbout],
+      ["the clinic name", clinicName],
+      ["the contact name", contactName],
+      ["the email address", email],
+      ["what you are promoting this month", promoting],
+    ];
+    if ("mohApproval" in (clinic.identity ?? {})) {
+      v2Required.push(["whether Ministry of Health approval is needed", trim(clinic.identity?.mohApproval)]);
+    }
+    if ("adBudgetExact" in (clinic.monthPlan ?? {})) {
+      const adBudget = trim(clinic.monthPlan?.adBudgetExact);
+      if (!adBudget || Number.isNaN(Number(adBudget))) {
+        v2Required.push(["your monthly ad budget paid to Meta (in KWD)", ""]);
+      }
+      v2Required.push(["how many bookings a month would make you happy", trim(clinic.monthPlan?.monthlyBookingTarget)]);
+      v2Required.push(["the price of the service we're promoting", trim(clinic.monthPlan?.servicePrice)]);
+    }
+    if ("instagramLinks" in (clinic.competitors ?? {})) {
+      const anyLink = (clinic.competitors?.instagramLinks ?? []).some((link) => !isBlank(link?.url));
+      if (!anyLink) {
+        v2Required.push(["at least one competitor clinic", ""]);
+      }
+    }
+    if ("leadOwner" in (clinic.leadsAccess ?? {})) {
+      v2Required.push(["who will answer the leads", trim(clinic.leadsAccess?.leadOwner)]);
+      v2Required.push(["where leads arrive today", trim(clinic.leadsAccess?.leadChannel)]);
+      v2Required.push(["the working hours for leads", trim(clinic.leadsAccess?.workingHours)]);
+      const access = clinic.leadsAccess;
+      if (!access?.accessAdAccount || !access?.accessPageIg || !access?.accessPixel || !access?.accessInbox) {
+        v2Required.push(["all four items on the access checklist", ""]);
+      }
+    }
+
+    const missing = v2Required.filter(([, value]) => !value).map(([label]) => label);
+
+    if (missing.length) {
       return NextResponse.json(
-        {
-          error:
-            "Please complete the required fields (clinic name, contact name, email, what you are promoting this month, and what you were unhappy about in previous advertising)",
-        },
+        { error: `Please complete the required fields: ${missing.join(", ")}` },
         { status: 400 }
       );
     }

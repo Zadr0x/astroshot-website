@@ -692,6 +692,10 @@ export type MediaBuyingPreviousAdLink = {
   note: string;
 };
 
+export type MediaBuyingCompetitorLink = {
+  url: string;
+};
+
 export type MediaBuyingClinicQuestionnairePayload = {
   identity: {
     clinicName: string;
@@ -702,6 +706,8 @@ export type MediaBuyingClinicQuestionnairePayload = {
     phone: string;
     location: string;
     specialties: string;
+    mohApproval: string;
+    mohOwner: string;
   };
   previousAds: {
     hasRunAds: string;
@@ -712,6 +718,7 @@ export type MediaBuyingClinicQuestionnairePayload = {
     goal: string;
     results: string;
     unhappyAbout: string;
+    /** Ad spend figure in KWD (v2). Older drafts may still hold a band label. */
     spendBand: string;
     reports: UploadedBrandAsset[];
     adLinks: MediaBuyingPreviousAdLink[];
@@ -724,8 +731,31 @@ export type MediaBuyingClinicQuestionnairePayload = {
     audienceGender: string;
     audienceArea: string;
     audienceNotes: string;
-    budgetBand: string;
+    /** Replaced by adBudgetExact in v2 — kept optional so old drafts still type-check. */
+    budgetBand?: string;
+    adBudgetExact: string;
+    monthlyBookingTarget: string;
+    servicePrice: string;
     keyDates: string;
+  };
+  competitors: {
+    instagramLinks: MediaBuyingCompetitorLink[];
+    theirStrengths: string;
+    ourStrengths: string;
+  };
+  leadsAccess: {
+    leadOwner: string;
+    leadChannel: string;
+    workingHours: string;
+    accessAdAccount: boolean;
+    accessPageIg: boolean;
+    accessPixel: boolean;
+    accessInbox: boolean;
+  };
+  monthlyExtras: {
+    monthlyMaterial: string;
+    monthlyNotes: string;
+    monthlyFiles: UploadedBrandAsset[];
   };
   doctors: MediaBuyingDoctor[];
   assets: {
@@ -735,6 +765,7 @@ export type MediaBuyingClinicQuestionnairePayload = {
     approver: string;
     approvalSpeed: string;
     driveLink: string;
+    /** Removed from the setup form in v2 (moved to monthlyExtras.monthlyNotes); kept for old drafts. */
     notes: string;
   };
 };
@@ -751,26 +782,47 @@ export const mediaBuyingClinicQuestionnaireSections: QuestionnaireSection[] = [
     eyebrow: "02 / Previous Advertising",
     title: "What happened last time?",
     description:
-      "This is the most important part of the form. If we do not understand what went wrong before, we will repeat it. Be blunt — the more honest this section is, the better the campaign.",
+      "This is the most important part of the form. If we do not understand what went wrong before, we will repeat it. The more honest this section is, the better the campaign.",
   },
   {
+    id: "assets",
+    eyebrow: "03 / Assets & Approvals",
+    title: "What do we have, and who signs off?",
+    description: "Brand files, existing footage, and the approval loop that keeps campaigns moving.",
+  },
+  {
+    id: "competitors",
+    eyebrow: "04 / Competitors",
+    title: "Who are you up against?",
+    description: "The clinics you are compared to, and what each side does better. This shapes the angle we take.",
+  },
+  {
+    id: "leadsAccess",
+    eyebrow: "05 / Leads & Access",
+    title: "Who answers the phone, and what can we reach?",
+    description: "Where the leads land, how fast they get answered, and the access we need before we can run anything.",
+  },
+];
+
+export const mediaBuyingClinicMonthlySections: QuestionnaireSection[] = [
+  {
     id: "monthPlan",
-    eyebrow: "03 / This Month",
+    eyebrow: "01 / This Month",
     title: "What are we promoting now?",
-    description: "The focus, the goal, the audience, and the budget band for this month.",
+    description: "The focus, the goal, the audience, and the ad budget for this month.",
   },
   {
     id: "doctors",
-    eyebrow: "04 / Doctors",
+    eyebrow: "02 / Doctors",
     title: "Who are we putting in front of the camera?",
     description:
       "Add every doctor we should focus on this month — as many as you need. Each doctor gets their own creative angle.",
   },
   {
-    id: "assets",
-    eyebrow: "05 / Assets & Approvals",
-    title: "What do we have, and who signs off?",
-    description: "Brand files, existing footage, and the approval loop that keeps campaigns moving.",
+    id: "monthlyExtras",
+    eyebrow: "03 / This Month's Extras",
+    title: "Anything new this month?",
+    description: "New material, sensitivities for the month, and any files the creative team should work from.",
   },
 ];
 
@@ -791,6 +843,16 @@ export const mediaBuyingBudgetBandOptions = [
 ];
 
 export const mediaBuyingHasRunAdsOptions = ["Yes", "No", "Not sure"];
+
+export const mediaBuyingMohApprovalOptions = ["Yes", "No", "Not sure"];
+
+export const mediaBuyingLeadChannelOptions = [
+  "WhatsApp Business app",
+  "WhatsApp API",
+  "Phone",
+  "CRM",
+  "Other",
+];
 
 export const mediaBuyingPreviousGoalOptions = [
   "Awareness",
@@ -840,6 +902,10 @@ export function emptyMediaBuyingPreviousAdLink(): MediaBuyingPreviousAdLink {
   };
 }
 
+export function emptyCompetitorLink(): MediaBuyingCompetitorLink {
+  return { url: "" };
+}
+
 export function emptyMediaBuyingClinicQuestionnairePayload(): MediaBuyingClinicQuestionnairePayload {
   return {
     identity: {
@@ -851,6 +917,8 @@ export function emptyMediaBuyingClinicQuestionnairePayload(): MediaBuyingClinicQ
       phone: "",
       location: "",
       specialties: "",
+      mohApproval: "",
+      mohOwner: "",
     },
     previousAds: {
       hasRunAds: "",
@@ -873,8 +941,29 @@ export function emptyMediaBuyingClinicQuestionnairePayload(): MediaBuyingClinicQ
       audienceGender: "",
       audienceArea: "",
       audienceNotes: "",
-      budgetBand: "",
+      adBudgetExact: "",
+      monthlyBookingTarget: "",
+      servicePrice: "",
       keyDates: "",
+    },
+    competitors: {
+      instagramLinks: [emptyCompetitorLink()],
+      theirStrengths: "",
+      ourStrengths: "",
+    },
+    leadsAccess: {
+      leadOwner: "",
+      leadChannel: "",
+      workingHours: "",
+      accessAdAccount: false,
+      accessPageIg: false,
+      accessPixel: false,
+      accessInbox: false,
+    },
+    monthlyExtras: {
+      monthlyMaterial: "",
+      monthlyNotes: "",
+      monthlyFiles: [],
     },
     doctors: [emptyMediaBuyingDoctor()],
     assets: {
@@ -905,40 +994,76 @@ export function summarizeMediaBuyingClinicQuestionnaire(payload: MediaBuyingClin
     .map((link, index) => `    ${index + 1}. ${link.url.trim()}${link.note.trim() ? ` (${link.note.trim()})` : ""}`)
     .join("\n");
 
+  const mohApproval = payload.identity?.mohApproval ?? "";
+  const mohOwner = payload.identity?.mohOwner ?? "";
+
+  const competitors = (payload.competitors?.instagramLinks ?? [])
+    .filter((link) => link.url.trim())
+    .map((link, index) => `    ${index + 1}. ${link.url.trim()}`)
+    .join("\n");
+
+  const accessFlags: Array<[string, boolean]> = [
+    ["Meta ad account", Boolean(payload.leadsAccess?.accessAdAccount)],
+    ["Facebook Page / Instagram", Boolean(payload.leadsAccess?.accessPageIg)],
+    ["Pixel", Boolean(payload.leadsAccess?.accessPixel)],
+    ["WhatsApp / inbox", Boolean(payload.leadsAccess?.accessInbox)],
+  ];
+  const accessLines = accessFlags
+    .map(([label, given]) => `    ${label}: ${given ? "yes" : "no"}${given ? "" : " ⚠ missing"}`)
+    .join("\n");
+
   return [
-    `Clinic: ${payload.identity.clinicName}`,
-    `Instagram: ${payload.identity.instagram || "Not provided"}`,
-    `Website: ${payload.identity.website || "Not provided"}`,
-    `Contact: ${payload.identity.contactName} / ${payload.identity.email} / ${payload.identity.phone || "no phone"}`,
-    `Location / branches: ${payload.identity.location}`,
-    `Specialties covered: ${payload.identity.specialties}`,
+    `Clinic: ${payload.identity?.clinicName ?? ""}`,
+    `Instagram: ${payload.identity?.instagram || "Not provided"}`,
+    `Website: ${payload.identity?.website || "Not provided"}`,
+    `Contact: ${payload.identity?.contactName ?? ""} / ${payload.identity?.email ?? ""} / ${payload.identity?.phone || "no phone"}`,
+    `Location / branches: ${payload.identity?.location ?? ""}`,
+    `Specialties covered: ${payload.identity?.specialties ?? ""}`,
+    `MoH approval: ${mohApproval}${mohOwner ? ` — handled by ${mohOwner}` : ""}`,
     `--- Previous advertising ---`,
-    `Has run paid ads: ${payload.previousAds.hasRunAds || "Not answered"}`,
-    `Channels used: ${payload.previousAds.channels || "Not provided"}`,
-    `Other channels: ${payload.previousAds.otherChannels || "None"}`,
-    `When / how long: ${payload.previousAds.timeframe || "n/a"} / ${payload.previousAds.duration || "n/a"}`,
-    `Previous goal: ${payload.previousAds.goal || "Not provided"}`,
-    `Results in their words: ${payload.previousAds.results || "Not provided"}`,
-    `UNHAPPY ABOUT: ${payload.previousAds.unhappyAbout || "Not provided"}`,
-    `Previous spend band: ${payload.previousAds.spendBand || "Not provided"}`,
-    `Previous reports uploaded: ${(payload.previousAds.reports ?? []).length}`,
-    `Previous ad links (${(payload.previousAds.adLinks ?? []).filter((l) => l.url.trim()).length}):\n${adLinks || "    None provided"}`,
-    `Creative observations: ${payload.previousAds.creativeObservations || "Not provided"}`,
+    `Has run paid ads: ${payload.previousAds?.hasRunAds || "Not answered"}`,
+    `Channels used: ${payload.previousAds?.channels || "Not provided"}`,
+    `Other channels: ${payload.previousAds?.otherChannels || "None"}`,
+    `When / how long: ${payload.previousAds?.timeframe || "n/a"} / ${payload.previousAds?.duration || "n/a"}`,
+    `Previous goal: ${payload.previousAds?.goal || "Not provided"}`,
+    `Results in their words: ${payload.previousAds?.results || "Not provided"}`,
+    `UNHAPPY ABOUT: ${payload.previousAds?.unhappyAbout || "Not provided"}`,
+    `Previous monthly spend (KWD): ${payload.previousAds?.spendBand || "Not provided"}`,
+    `Previous reports uploaded: ${(payload.previousAds?.reports ?? []).length}`,
+    `Previous ad links (${(payload.previousAds?.adLinks ?? []).filter((l) => l.url.trim()).length}):\n${adLinks || "    None provided"}`,
+    `Creative observations: ${payload.previousAds?.creativeObservations || "Not provided"}`,
+    `--- Competitors ---`,
+    `Competitor clinics (${(payload.competitors?.instagramLinks ?? []).filter((l) => l.url.trim()).length}):\n${
+      competitors || "    None provided"
+    }`,
+    `Their strengths: ${payload.competitors?.theirStrengths || "Not provided"}`,
+    `Our strengths: ${payload.competitors?.ourStrengths || "Not provided"}`,
+    `--- Leads & access ---`,
+    `Lead owner: ${payload.leadsAccess?.leadOwner || "Not provided"}`,
+    `Lead channel: ${payload.leadsAccess?.leadChannel || "Not provided"}`,
+    `Working hours: ${payload.leadsAccess?.workingHours || "Not provided"}`,
+    `Access checklist:\n${accessLines}`,
     `--- This month ---`,
-    `Promoting: ${payload.monthPlan.promoting}`,
-    `Primary goal: ${payload.monthPlan.primaryGoal || "Not provided"}`,
-    `Audience: age ${payload.monthPlan.audienceAge || "n/a"}, gender ${payload.monthPlan.audienceGender || "n/a"}, area ${payload.monthPlan.audienceArea || "n/a"}`,
-    `Audience notes: ${payload.monthPlan.audienceNotes || "None"}`,
-    `Budget band: ${payload.monthPlan.budgetBand || "Not provided"}`,
-    `Key dates: ${payload.monthPlan.keyDates || "None"}`,
+    `Promoting: ${payload.monthPlan?.promoting ?? ""}`,
+    `Primary goal: ${payload.monthPlan?.primaryGoal || "Not provided"}`,
+    `Monthly booking target: ${payload.monthPlan?.monthlyBookingTarget || "Not provided"}`,
+    `Service price: ${payload.monthPlan?.servicePrice || "Not provided"} KWD`,
+    `Monthly ad budget (Meta only, excl. fee): ${payload.monthPlan?.adBudgetExact || "Not provided"} KWD`,
+    `Audience: age ${payload.monthPlan?.audienceAge || "n/a"}, gender ${payload.monthPlan?.audienceGender || "n/a"}, area ${payload.monthPlan?.audienceArea || "n/a"}`,
+    `Audience notes: ${payload.monthPlan?.audienceNotes || "None"}`,
+    `Key dates: ${payload.monthPlan?.keyDates || "None"}`,
     `--- Doctors (${(payload.doctors ?? []).filter((d) => d.name.trim() || d.specialty.trim()).length}) ---\n${doctors || "    None provided"}`,
     `--- Assets ---`,
-    `Brand assets available: ${payload.assets.brandAssetsAvailable || "Not provided"}`,
-    `Brand files uploaded: ${(payload.assets.brandFiles ?? []).length}`,
-    `Existing material: ${payload.assets.existingMaterial || "Not provided"}`,
-    `Creative approver: ${payload.assets.approver || "Not provided"}`,
-    `Approval speed: ${payload.assets.approvalSpeed || "Not provided"}`,
-    `Asset Drive: ${payload.assets.driveLink || "Not provided"}`,
-    `Notes: ${payload.assets.notes || "None"}`,
+    `Brand assets available: ${payload.assets?.brandAssetsAvailable || "Not provided"}`,
+    `Brand files uploaded: ${(payload.assets?.brandFiles ?? []).length}`,
+    `Existing material: ${payload.assets?.existingMaterial || "Not provided"}`,
+    `Creative approver: ${payload.assets?.approver || "Not provided"}`,
+    `Approval speed: ${payload.assets?.approvalSpeed || "Not provided"}`,
+    `Asset Drive: ${payload.assets?.driveLink || "Not provided"}`,
+    `Notes: ${payload.assets?.notes || "None"}`,
+    `--- This month's extras ---`,
+    `New material: ${payload.monthlyExtras?.monthlyMaterial || "None"}`,
+    `Monthly notes: ${payload.monthlyExtras?.monthlyNotes || "None"}`,
+    `Monthly files uploaded: ${(payload.monthlyExtras?.monthlyFiles ?? []).length}`,
   ].join("\n");
 }

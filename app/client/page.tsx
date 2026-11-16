@@ -1876,6 +1876,7 @@ export default function ClientPortalPage() {
     return (
       <MediaBuyingClinicQuestionnaire
         clientName={clientName}
+        isClinic={questionnaireType === "media_buying_clinic"}
         onSubmitted={() => {
           setSubmitted(true);
           setQuestionnaireSubmitted(true);
