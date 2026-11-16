@@ -276,12 +276,16 @@ export async function POST(request: Request) {
     // drafts saved before v2 can still be submitted without being blocked here.
     const isBlank = (value: unknown) => !trim(value);
     const v2Required: Array<[string, string]> = [
-      ["what you were unhappy about in previous advertising", unhappyAbout],
       ["the clinic name", clinicName],
       ["the contact name", contactName],
       ["the email address", email],
       ["what you are promoting this month", promoting],
     ];
+    // A clinic that has never run ads is never asked what it was unhappy about,
+    // so it must not be required from them.
+    if (trim(clinic.previousAds?.hasRunAds) !== "No") {
+      v2Required.push(["what you were unhappy about in previous advertising", unhappyAbout]);
+    }
     if ("mohApproval" in (clinic.identity ?? {})) {
       v2Required.push(["whether Ministry of Health approval is needed", trim(clinic.identity?.mohApproval)]);
     }

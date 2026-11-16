@@ -63,9 +63,6 @@ const REQUIRED_BY_STEP: Record<string, string[]> = {
   ],
 };
 
-// Steps that can never be "required-invalid" but are listed for completeness.
-const ACCESS_STEP_PREFIX = "leadsAccess.access";
-
 const accessChecklist: Array<{ key: string; label: string }> = [
   { key: "leadsAccess.accessAdAccount", label: "Partner access to our Meta ad account given (how-to video)" },
   { key: "leadsAccess.accessPageIg", label: "Facebook Page and Instagram access given" },
@@ -274,7 +271,7 @@ export default function MediaBuyingClinicQuestionnaire({
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [uploading, setUploading] = useState(false);
-  const [uploadError, setUploadError] = useState("");
+  const [uploadError, setUploadError] = useState<{ target: FileTarget; message: string } | null>(null);
   const [autoSaveState, setAutoSaveState] = useState<AutoSaveState>("idle");
   const [loadedDraft, setLoadedDraft] = useState(false);
   const lastSavedRef = useRef("");
@@ -300,6 +297,11 @@ export default function MediaBuyingClinicQuestionnaire({
   const isLastStep = safeStep === visibleSections.length - 1;
 
   const activeRequired = (stepId: string): string[] => {
+    // A client who has never run ads is never shown the previous-ads questions,
+    // and clearPreviousAdsAnswers blanks them. Only hasRunAds can be required there.
+    if (stepId === "previousAds" && payload.previousAds.hasRunAds === "No") {
+      return ["previousAds.hasRunAds"];
+    }
     if (stepId === "identity" && !isClinic) {
       return REQUIRED_BY_STEP.identity.filter(
         (path) => path !== "identity.mohApproval" && path !== "identity.mohOwner"
@@ -382,6 +384,13 @@ export default function MediaBuyingClinicQuestionnaire({
 
   const jumpToStep = (index: number) => {
     if (index === safeStep) return;
+    // Going back to an earlier step is always allowed — the client may need to
+    // look something up. Only forward jumps past an invalid step are blocked.
+    if (index < safeStep) {
+      setActiveStep(index);
+      setSubmitError("");
+      return;
+    }
     // Leaving a step only locks it in if it was actually attempted.
     if (!isStepValid(safeStep)) {
       markStepTouched(safeStep);
@@ -575,7 +584,7 @@ export default function MediaBuyingClinicQuestionnaire({
 
   const uploadFiles = async (files: FileList, target: FileTarget) => {
     setUploading(true);
-    setUploadError("");
+    setUploadError(null);
 
     try {
       const uploaded: UploadedBrandAsset[] = [];
@@ -638,7 +647,10 @@ export default function MediaBuyingClinicQuestionnaire({
       });
       setAutoSaveState("idle");
     } catch (error) {
-      setUploadError(error instanceof Error ? error.message : "Upload failed");
+      setUploadError({
+        target,
+        message: error instanceof Error ? error.message : "Upload failed",
+      });
     } finally {
       setUploading(false);
     }
@@ -683,6 +695,12 @@ export default function MediaBuyingClinicQuestionnaire({
   };
 
   const handleSubmit = async () => {
+    // Submitting mid-upload would silently drop the file from the brief.
+    if (uploading) {
+      setSubmitError("Please wait — your file is still uploading.");
+      return;
+    }
+
     // Re-check every visible step before posting anything.
     const invalidIndex = firstInvalidIndex();
     if (invalidIndex !== -1) {
@@ -699,6 +717,9 @@ export default function MediaBuyingClinicQuestionnaire({
     }
 
     setSubmitting(true);
+    // Set BEFORE clearing the timer. A timer callback may already be past its
+    // submittingRef check and awaiting its fetch; the flag must be true first
+    // so no autosave POST races the submit POST.
     submittingRef.current = true;
     setSubmitError("");
     // Cancel any pending autosave so it cannot fire on top of the final submit.
@@ -802,7 +823,7 @@ export default function MediaBuyingClinicQuestionnaire({
           <p className="mt-4 max-w-2xl text-sm leading-7 text-white/55">{section.description}</p>
 
           <div className="mt-8">
-            {safeStep === 0 && phase === "setup" && (
+            {safeStep === 0 && (
               <p className="mb-6 text-xs font-bold text-white/35">Fields marked * are required.</p>
             )}
 
@@ -1033,7 +1054,7 @@ export default function MediaBuyingClinicQuestionnaire({
                       />
                     </label>
                   </div>
-                  {uploadError && <p className="mt-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">{uploadError}</p>}
+                  {uploadError?.target === "reports" && <p className="mt-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">{uploadError.message}</p>}
                   {fileList(payload.previousAds.reports, "reports", "No reports uploaded yet — that is fine if you do not have them.")}
                 </div>
 
@@ -1318,7 +1339,7 @@ export default function MediaBuyingClinicQuestionnaire({
                       />
                     </label>
                   </div>
-                  {uploadError && <p className="mt-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">{uploadError}</p>}
+                  {uploadError?.target === "brandFiles" && <p className="mt-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">{uploadError.message}</p>}
                   {fileList(payload.assets.brandFiles, "brandFiles", "No brand files uploaded yet.")}
                 </div>
 
@@ -1433,6 +1454,8 @@ export default function MediaBuyingClinicQuestionnaire({
                   <div className="grid gap-2">
                     {accessChecklist.map((item) => {
                       const checked = Boolean(readPath(payload, item.key));
+                      // Visible, not just aria: on a phone the client must see which box is missing.
+                      const missing = Boolean(touchedSteps[safeStep]) && !checked;
                       return (
                         <button
                           key={item.key}
@@ -1445,7 +1468,9 @@ export default function MediaBuyingClinicQuestionnaire({
                           className={`flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left text-sm font-semibold transition-colors ${
                             checked
                               ? "border-[#01F17C]/60 bg-[#01F17C]/10 text-[#01F17C]"
-                              : "border-white/10 bg-white/[0.03] text-white/60 hover:text-white"
+                              : missing
+                                ? "border-red-500/50 bg-white/[0.03] text-white/60 hover:text-white"
+                                : "border-white/10 bg-white/[0.03] text-white/60 hover:text-white"
                           }`}
                         >
                           <span
@@ -1508,7 +1533,7 @@ export default function MediaBuyingClinicQuestionnaire({
                       />
                     </label>
                   </div>
-                  {uploadError && <p className="mt-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">{uploadError}</p>}
+                  {uploadError?.target === "monthlyFiles" && <p className="mt-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">{uploadError.message}</p>}
                   {fileList(payload.monthlyExtras.monthlyFiles, "monthlyFiles", "No files uploaded for this month yet.")}
                 </div>
               </div>

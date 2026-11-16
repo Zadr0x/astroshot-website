@@ -1,98 +1,127 @@
-# TASK — Questionnaire v2: Eren QC fixes (round 1)
+# TASK — Questionnaire v2: Eren QC fixes ROUND 2
 
-Eren (Opus) reviewed your v2 build. Verdict: DO NOT SHIP. Six real defects.
-The core mechanics passed — validation gating, checkbox enforcement, draft merge,
-and the api route validation all reviewed clean. These are the remaining fixes.
+All six round-1 fixes verified as genuinely fixed. One blocker remains, created by the
+H1 fix. Plus six smaller defects found in round 2. Fix all of these.
 
 ## SCOPE — the only files you may touch
 
 ```
 app/client/media-buying-clinic-questionnaire.tsx
 lib/client-questionnaire.ts
+app/api/client-questionnaire/route.ts
 ```
 
+**`route.ts` is in scope for C3 ONLY** — the server has the same bug (see C3), and
+fixing the client alone is not enough because the API would still 400 the submission.
+Change nothing else in that file.
+
 ## EXPLICITLY OUT OF SCOPE
-- Everything else. Do not touch `lib/client-portal-auth.ts`, `next-env.d.ts`,
-  any API route, any other questionnaire, or any page.
-- **Do NOT add any test-password / auth bypass to `lib/client-portal-auth.ts` again.**
-  You did this in the previous run and I reverted it. It is a security hole. If you
-  cannot test without it, write your test harness in a scratch file outside the repo,
-  or say so in your report and skip that verification step.
-- No deletions. No deploys.
+- Everything else. No auth files, no API routes, no pages, no other questionnaires.
+- No deletions of files. No deploys.
+- Do NOT reintroduce any test-password / auth bypass anywhere.
 
-## Fixes required
+---
 
-### C1 — CRITICAL: disabled Continue is a dead end
-`disabled={!isStepValid(safeStep)}` means `onClick` never fires, so
-`markStepTouched` never runs, so no inline "This is required." ever renders.
-The client sees a dimmed button that does nothing and gets no explanation.
+### C3 — BLOCKER: "No" to hasRunAds makes the form unsubmittable
 
-Fix: do **not** use the HTML `disabled` attribute on Continue. Instead:
-- Always allow the click.
-- `onClick` calls `markStepTouched(safeStep)` FIRST.
-- Then, if `!isStepValid(safeStep)`, short-circuit (do not advance).
-- Style the button at reduced opacity when invalid so it still *looks* unavailable
-  (`opacity-50 cursor-not-allowed` classes are fine — just not the `disabled` attr,
-  because that kills the click event).
-- Keep `aria-disabled={!isStepValid(safeStep)}` for accessibility, but not `disabled`.
+`REQUIRED_BY_STEP.previousAds` contains `previousAds.unhappyAbout`.
+When the client answers "No" to `hasRunAds`:
+- `clearPreviousAdsAnswers` zeroes `unhappyAbout` to `""`
+- the "No" branch does not render that field at all
+- but it is still in the required list
 
-Result: tapping Continue on an empty step reveals all the red inline errors.
+Result: `isStepValid("previousAds")` is permanently false. Continue will not advance,
+the sidebar will not navigate, and Submit bounces them back to a step whose required
+field does not exist on screen. Every first-time advertiser — a big share of new clinic
+clients — is locked out.
 
-### C2 — CRITICAL: `identity.mohOwner` never required when `mohApproval === "Yes"`
-`REQUIRED_BY_STEP.identity` lists `mohApproval` but not `mohOwner`, and
-`activeRequired()` never adds it.
+Fix: in `activeRequired()`, when the step is `previousAds` and
+`payload.previousAds.hasRunAds === "No"`, return only `["previousAds.hasRunAds"]`.
+When the answer is "Yes", return the full list as today.
 
-Fix: in `activeRequired()` (or whatever resolves the per-step required list),
-dynamically append `"identity.mohOwner"` when
-`payload.identity.mohApproval === "Yes"`.
+Also the SERVER has the same bug and you must fix it: in
+`app/api/client-questionnaire/route.ts`, `unhappyAbout` is pushed into `v2Required`
+unconditionally (line ~279). A "No" submission therefore gets a 400 even with the UI
+fixed. Wrap that entry: only require `unhappyAbout` when the clinic did NOT answer "No"
+— i.e. `if (trim(clinic.previousAds?.hasRunAds) !== "No") { v2Required.push([...]) }`.
+Change nothing else in that file.
 
-### H1 — HIGH: picking "No" to `hasRunAds` is irreversible
-When `hasRunAds === "No"` the `previousAds` section is removed from
-`visibleSections` — but the dropdown that sets `hasRunAds` lives *inside* that
-section. The client can therefore never switch back to "Yes".
+---
 
-Fix: keep the `Has run paid ads before?` select reachable when the answer is "No".
-Simplest correct approach: when `hasRunAds === "No"`, still render the section but
-show ONLY that one select plus a short line —
-`No problem — we will start from scratch. Change this to "Yes" if you have run ads before.`
-Then hide the rest of the section body. Do not leave the client stuck.
+### M3 — Cannot navigate to an earlier completed step while the current one is invalid
 
-### H2 — HIGH: access checklist shows no error for 3-of-4 checked
-The single `<RequiredError show={showErrorFor("leadsAccess.accessAdAccount")} />`
-only reflects ONE checkbox. If the other three are unchecked the button blocks but
-no message shows.
+`jumpToStep` blocks ALL navigation when the current step is invalid, including going
+*back* to a step they already completed to look something up.
 
-Fix: render ONE checklist-level error when any of the four is unchecked and the step
-is touched. Copy: `All four access items must be ticked before we can start. If you
-are stuck on any of them, write "need help" in the working hours field and we will
-walk you through it.`
-(That last sentence matters — a client who cannot find their pixel should have a way
-out that is not abandoning the form.)
+Fix: allow navigation to a step whose index is LOWER than the current index regardless
+of validity. Only block forward jumps past an invalid step.
 
-### M1 — MEDIUM: phone field has no numeric keypad
-Add `inputMode="tel"` to the `Phone` `TextField`. Also add `inputMode="numeric"`
-to `adBudgetExact` and `servicePrice` if not already set.
+---
 
-### M2 — MEDIUM: autosave can race the final submit
-A 1s debounce timer scheduled *before* `setSubmitting(true)` is not cleared and
-still fires after submit.
+### M4 — Submit does not check for in-flight uploads
 
-Fix: keep a `saveTimerRef` for the autosave timeout. In `handleSubmit`, call
-`window.clearTimeout(saveTimerRef.current)` before POSTing. Also re-check
-`submitting` inside the autosave fetch body before sending.
+If the client picks a large video and taps Submit while it is still uploading, the
+brief submits without the asset.
 
-## Verification required — report real output
+Fix: at the top of `handleSubmit`, `if (uploading) return;` and show:
+`Please wait — your file is still uploading.`
+
+---
+
+### L4 — Dead constant
+
+`ACCESS_STEP_PREFIX` is declared and never used. Remove it.
+
+---
+
+### L5 — Autosave/submit race
+
+If the autosave timer callback is already past its `submittingRef` check and awaiting
+its fetch when submit starts, two concurrent POSTs land.
+
+Fix: set `submittingRef.current = true` BEFORE `window.clearTimeout(saveTimerRef.current)`
+in `handleSubmit`, and keep the in-callback guard.
+
+---
+
+### L6 — Required-field legend missing in monthly phase
+
+The line "Fields marked * are required." only renders in the setup phase. The monthly
+phase first step also has required fields.
+
+Fix: render that legend on the first step of whichever phase is active.
+
+---
+
+### L7 — Upload error bleeds between upload targets
+
+`uploadError` is shared. A failed `reports` upload leaves its error banner visible when
+the user scrolls to `brandFiles`.
+
+Fix: clear `uploadError` at the start of every upload attempt (already done) AND key the
+error by target so it only renders under the uploader that produced it. Simplest correct
+approach: `uploadError` becomes `{ target: "reports" | "brandFiles", message: string } | null`.
+
+---
+
+### L8 — No visual error state on access checkboxes
+
+`aria-invalid` is set but there is no visible border change, so a client on a phone
+cannot see which box is missing.
+
+Fix: when the checklist-level error is showing, give un-ticked checkboxes a red border
+(`border-red-500/50`). Keep the existing green border for ticked ones.
+
+---
+
+## Verification required
 
 1. `npx tsc --noEmit` — paste the tail.
 2. `npm run build` — paste the tail.
-3. Confirm by reading your own code and stating it plainly:
-   - Tapping Continue on an empty required step shows the inline errors (C1).
-   - `mohOwner` blocks when `mohApproval === "Yes"` (C2).
-   - Choosing "No" for `hasRunAds` leaves a way back to "Yes" (H1).
-   - Unticking any access box shows a visible message (H2).
-4. Do NOT claim browser verification you did not do. If you cannot test in a browser
-   without the auth bypass, say exactly that.
+3. State plainly, by reading your code, how C3 is now resolved for a "No" answer.
+4. **Do NOT claim browser verification.** You have no way to log in without the bypass
+   and you must not add one. Say "not browser-tested" in your report.
 
 ## Report back
-Each fix: what you changed and the line/location. Then the tsc + build output.
-Then anything you could not verify.
+Each fix with its location. The tsc and build tails. Then, explicitly, whether the API
+route would still reject a "No" submission (per the C3 note) — report only, do not edit.
