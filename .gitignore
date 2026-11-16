@@ -12,7 +12,9 @@ dist/
 *.p8
 *.key
 .secrets/
-data/
+data/*
+!data/kuwaiti-caption-corpus.json
+!data/kuwaiti-caption-style-guide.md
 *.sqlite
 *.db
 *.htpasswd
@@ -29,3 +31,4 @@ data/
 coverage/
 .vercel
 tsconfig.tsbuildinfo
+
