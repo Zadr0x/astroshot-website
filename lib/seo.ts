@@ -68,6 +68,35 @@ export const organizationSchema = {
   email: companyInfo.email,
   telephone: companyInfo.phoneDisplay,
   address: kuwaitOffice,
+  // Registered mailing address of the legal entity (Astroshot LLC, Wyoming)
+  legalAddress: {
+    "@type": "PostalAddress",
+    streetAddress: companyInfo.addressLines[0],
+    addressLocality: "Sheridan",
+    addressRegion: "WY",
+    postalCode: "82801",
+    addressCountry: "US",
+  },
+  taxID: companyInfo.ein,
+  parentOrganization: {
+    "@type": "Organization",
+    name: companyInfo.legalName,
+    legalName: companyInfo.legalName,
+    foundingDate: "2026-06-24",
+    foundingLocation: {
+      "@type": "Place",
+      name: "Sheridan, Wyoming, United States",
+    },
+    taxID: companyInfo.ein,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: companyInfo.addressLines[0],
+      addressLocality: "Sheridan",
+      addressRegion: "WY",
+      postalCode: "82801",
+      addressCountry: "US",
+    },
+  },
   areaServed: serviceAreas,
   logo: {
     "@type": "ImageObject",
@@ -86,7 +115,11 @@ export const organizationSchema = {
     "@type": "Place",
     name: "Kuwait City, Kuwait",
   },
-  sameAs: [companyInfo.instagramUrl, "https://www.tiktok.com/@astroshotmedia"],
+  sameAs: [
+    companyInfo.instagramUrl,
+    "https://www.tiktok.com/@astroshotmedia",
+    `${siteUrl}/contic`,
+  ],
   knowsAbout: [
     "VFX",
     "CGI",
@@ -153,3 +186,32 @@ export function faqSchema(faqs: { q: string; a: string }[]) {
     })),
   };
 }
+
+export const softwareApplicationSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "@id": `${siteUrl}/contic#app`,
+  name: "Contic",
+  url: `${siteUrl}/contic`,
+  applicationCategory: "BusinessApplication",
+  applicationSubCategory: "AI Marketing",
+  operatingSystem: "iOS, Android",
+  description:
+    "Contic is an AI marketing application by Astroshot LLC that helps creators, brands and marketing teams generate social media captions, scripts, content ideas, voice workflows and images.",
+  publisher: {
+    "@type": "Organization",
+    name: companyInfo.legalName,
+    legalName: companyInfo.legalName,
+    taxID: companyInfo.ein,
+    url: `${siteUrl}/contic`,
+    email: companyInfo.email,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: companyInfo.addressLines[0],
+      addressLocality: "Sheridan",
+      addressRegion: "WY",
+      postalCode: "82801",
+      addressCountry: "US",
+    },
+  },
+};

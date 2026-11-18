@@ -7,6 +7,7 @@ import StatsSection from "@/components/sections/StatsSection";
 import AboutTeaser from "@/components/sections/AboutTeaser";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import CTABanner from "@/components/sections/CTABanner";
+import ConticSection from "@/components/sections/ConticSection";
 
 export default function HomePage() {
   return (
@@ -19,6 +20,7 @@ export default function HomePage() {
       <StatsSection />
       <AboutTeaser />
       <TestimonialsSection />
+      <ConticSection />
       <CTABanner />
     </>
   );
