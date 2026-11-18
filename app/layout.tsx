@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { companyInfo } from "@/lib/company-info";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
@@ -70,11 +71,16 @@ const META_PIXEL_ID = "1732638231438322";
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "Astroshot Project Management Company",
+  "@type": ["Organization", "ProfessionalService"],
+  "@id": "https://astroshotmedia.com/#organization",
+  name: "Astroshot",
+  legalName: companyInfo.legalName,
+  alternateName: "Astroshot Project Management Company",
   url: "https://astroshotmedia.com",
   description:
     "Kuwait's leading VFX, CGI, and creative marketing agency serving brands across the GCC",
+  taxID: companyInfo.ein,
+  foundingDate: "2018",
   address: {
     "@type": "PostalAddress",
     streetAddress:
@@ -82,12 +88,78 @@ const jsonLd = {
     addressLocality: "Kuwait City",
     addressCountry: "KW",
   },
+  // Registered mailing address of the legal entity.
+  legalAddress: {
+    "@type": "PostalAddress",
+    streetAddress: companyInfo.addressLines[0],
+    addressLocality: "Sheridan",
+    addressRegion: "WY",
+    postalCode: "82801",
+    addressCountry: "US",
+  },
+  parentOrganization: {
+    "@type": "Organization",
+    "@id": "https://astroshotmedia.com/#legal-entity",
+    name: companyInfo.legalName,
+    legalName: companyInfo.legalName,
+    taxID: companyInfo.ein,
+    foundingDate: "2026-06-24",
+    url: "https://astroshotmedia.com/contic",
+    foundingLocation: {
+      "@type": "Place",
+      name: "Sheridan, Wyoming, United States",
+    },
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: companyInfo.addressLines[0],
+      addressLocality: "Sheridan",
+      addressRegion: "WY",
+      postalCode: "82801",
+      addressCountry: "US",
+    },
+  },
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+965-9333-6065",
-    email: "info@astroshotpm.com",
+    email: companyInfo.email,
+    contactType: "customer support",
   },
-  sameAs: ["https://www.instagram.com/astroshotmedia"],
+  sameAs: [
+    "https://www.instagram.com/astroshotmedia",
+    "https://astroshotmedia.com/contic",
+  ],
+};
+
+// Contic — the mobile app. Apple review looks for the app to be named and tied to
+// the publishing entity on the website.
+const conticAppJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "@id": "https://astroshotmedia.com/contic#app",
+  name: "Contic",
+  url: "https://astroshotmedia.com/contic",
+  applicationCategory: "BusinessApplication",
+  applicationSubCategory: "AI Marketing",
+  operatingSystem: "iOS, Android",
+  description:
+    "Contic is an AI marketing application by Astroshot LLC that helps creators, brands and marketing teams generate social media captions, scripts, content ideas, voice workflows and images.",
+  publisher: {
+    "@type": "Organization",
+    "@id": "https://astroshotmedia.com/#legal-entity",
+    name: companyInfo.legalName,
+    legalName: companyInfo.legalName,
+    taxID: companyInfo.ein,
+    email: companyInfo.email,
+    url: "https://astroshotmedia.com/contic",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: companyInfo.addressLines[0],
+      addressLocality: "Sheridan",
+      addressRegion: "WY",
+      postalCode: "82801",
+      addressCountry: "US",
+    },
+  },
 };
 
 export default function RootLayout({
@@ -127,6 +199,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(conticAppJsonLd) }}
         />
       </head>
       <body className="min-h-full flex flex-col bg-[#050505] text-[#FAFAFA]">
