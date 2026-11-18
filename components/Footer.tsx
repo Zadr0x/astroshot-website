@@ -38,11 +38,11 @@ export default function Footer() {
                 ASTRO<span className="text-[#01F17C]">SHOT</span>
               </span>
             </Link>
-            <p className="text-[#666666] text-sm leading-relaxed max-w-xs">
+            <p className="text-[#9A9A9A] text-sm leading-relaxed max-w-xs">
               Kuwait&apos;s leading VFX, CGI, and creative marketing agency.
               Making brands impossible to ignore across the GCC.
             </p>
-            <div className="mt-6 flex flex-col gap-1 text-sm text-[#666666]">
+            <div className="mt-6 flex flex-col gap-1 text-sm text-[#9A9A9A]">
               <a
                 href={`mailto:${companyInfo.email}`}
                 className="hover:text-[#01F17C] transition-colors"
@@ -77,7 +77,7 @@ export default function Footer() {
                   <li key={`${category}-${link.label}`}>
                     <Link
                       href={link.href}
-                      className="text-sm text-[#666666] hover:text-white transition-colors"
+                      className="text-sm text-[#9A9A9A] hover:text-white transition-colors"
                     >
                       {link.label}
                     </Link>
@@ -88,23 +88,23 @@ export default function Footer() {
           ))}
         </div>
 
-        <div className="mt-12 pt-8 border-t border-white/10 flex flex-col gap-4">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <p className="text-xs text-[#444444]">
+        <div className="mt-12 pt-8 border-t border-white/10 flex flex-col gap-5">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+            <p className="text-sm text-[#9A9A9A]">
               © {new Date().getFullYear()} {companyInfo.legalName}. All rights
               reserved.
             </p>
-            <p className="text-xs text-[#444444]">
+            <p className="text-sm text-[#9A9A9A]">
               Kuwait Office — Qibla Block 13, Al Salam Tower, 16th Floor, Office
               No 7, Kuwait City, Kuwait
             </p>
           </div>
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <p className="text-xs text-[#444444]">
-              {companyInfo.legalName} · Registered in {companyInfo.stateOfFormation} · EIN{" "}
-              {companyInfo.ein}
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+            <p className="text-sm text-[#9A9A9A]">
+              {companyInfo.legalName} · Registered in{" "}
+              {companyInfo.stateOfFormation} · EIN {companyInfo.ein}
             </p>
-            <p className="text-xs text-[#444444]">
+            <p className="text-sm text-[#9A9A9A]">
               {companyInfo.addressLines.join(", ")}
             </p>
           </div>
